@@ -16,6 +16,21 @@ class VMBase(object):
     def executeNextInstruction(self):
         pass
 
+    def setInstructionPointer(self, addr):
+        """
+        Sets the instruction pointer to the specified address
+        """
+        t = addr[0]
+        pos = addr[1:]
+        if t == '*':
+            memAddr = self.hex2int(pos)
+            output = self.getMem(memAddr)
+        elif t == '#':
+            output = self.hex2int(pos)
+        elif t == 's':
+            output = self.pop()
+        self.position = output
+
     def getValue(self, addr):
         """
         Retrieves a value based on the input
