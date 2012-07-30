@@ -42,11 +42,11 @@ class VMBase(object):
         self.instructions[inst]()
 
 
-    def setInstructionPointer(self, addr):
+    def setInstructionPointer(self, address):
         """
-        Sets the instruction pointer to the specified value
+        Sets the instruction pointer to the specified address
         """
-        self.position = addr
+        self.position = address
 
     def next(self):
         self.position += 1
