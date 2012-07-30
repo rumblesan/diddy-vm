@@ -1,102 +1,84 @@
 #!/usr/bin/env python
 
-# This is the class that contains all the logic for the Diddy VM
-# The VM has two sections, the RAM and the Stack
-# I probablly only need one or the other of these
-# but right now I don't know what I'm doing so just roll with it
+# This is the class that contains all the basic methods for the Diddy VM
+#
+# This machine operates entirely in RAM
+# There are registers for special uses,
+#   Input
+#   Output
+#   Exiting
+# Instructions can have a variable number of arguments
+# The machines memory width is 16 bits
+
+import sys
 
 class VMBase(object):
 
     def __init__(self):
         self.ram = dict.fromkeys(xrange(2 ** 12), 0)
-        self.stack = []
-        self.position = 0
+        self.instructions = {}
+
+        self.position = 100
+
+        self.registers = {}
+
+        self.registers[0] = self.exit
+        self.registers[1] = self.output
+
+        self.setupInstructionTable()
+
+    def run(self):
+        while True:
+            print("Running")
+            self.executeNextInstruction()
 
     # General purpose functions
     def executeNextInstruction(self):
-        pass
+        """
+        Retrieves the value from the memory location pointed to
+        by the position pointer and executes it
+        """
+        inst = self.ram[self.position]
+        self.instructions[inst]()
+
 
     def setInstructionPointer(self, addr):
         """
-        Sets the instruction pointer to the specified address
+        Sets the instruction pointer to the specified value
         """
-        t = addr[0]
-        pos = addr[1:]
-        if t == '*':
-            memAddr = self.hex2int(pos)
-            output = self.getMem(memAddr)
-        elif t == '#':
-            output = self.hex2int(pos)
-        elif t == 's':
-            output = self.pop()
-        self.position = output
+        self.position = addr
 
-    def getValue(self, addr):
-        """
-        Retrieves a value based on the input
-        Address values are always 4 characters and correspond to RAM
-        addresses, literal values or the top value popped off the stack
+    def next(self):
+        self.position += 1
 
-        Addresses in RAM are prefixed by a *
-            e.g.  *00F corresponds to the 16th position in RAM
-
-        Literal values are prefixed with a #
-            e.g.  #F50 is a value of 3920
-
-        Stack values are prefixed with an 's', the remaining
-        three chars don't matter. The value returned will be
-        the next value popped off the stack
-        """
-        t = addr[0]
-        pos = addr[1:]
-        if t == '*':
-            memAddr = self.hex2int(pos)
-            output = self.getMem(memAddr)
-        elif t == '#':
-            output = self.hex2int(pos)
-        elif t == 's':
-            output = self.pop()
+    def getMem(self, addr=-1):
+        if addr == -1:
+            output = self.ram[self.position]
+        else:
+            output = self.ram[addr]
         return output
 
-    def setValue(self, addr, val):
-        """
-        Sets the value in the correct structure. Either stack or RAM
-        Address values are always 4 characters and correspond to RAM
-        addresses or a command to push the value to the stack
+    def setMem(self, addr, value):
+        if addr in self.registers:
+            self.registers[addr](value)
+        else:
+            self.ram[addr] = value
 
-        Addresses in RAM are prefixed by a *
-            e.g.  *00F corresponds to the 16th position in RAM
+    # TODO Ugly, needs making better
+    def exit(self, val):
+        sys.exit(val)
 
-        Stack values are prefixed with an 's', the remaining
-        three chars don't matter. The value is pushed onto the stack
-        """
-        t = addr[0]
-        pos = addr[1:]
-        if t == '*':
-            memAddr = self.hex2int(pos)
-            self.setMem(memAddr, val)
-        elif t == '#':
-            pass
-        elif t == 's':
-            self.push(val)
+    def output(self, c):
+        print(c)
 
-    def setMem(self, addr, val):
-        self.ram[addr] = val
 
-    def getMem(self, addr):
-        return self.ram[addr]
-
-    def push(self, v):
-        self.stack.append(v)
-
-    def pop(self):
-        return self.stack.pop()
-
-    def hex2int(self, val):
-        return int(val, 16)
-
-    def int2hex(self, val):
-        return hex(val)[2:].rjust(3, '0')
+    def loadProgram(self, filename):
+        fp = open(filename)
+        for line in fp:
+            value = int(line)
+            self.setMem(self.position, value)
+            self.next()
+        self.setInstructionPointer(100)
 
 
 

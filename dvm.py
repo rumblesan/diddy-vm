@@ -6,101 +6,177 @@ from vmbase import VMBase
 class DVM(VMBase):
 
     def setupInstructionTable(self):
-        self.instructions = {}
-
         i = self.instructions
 
-        i['move'] = self.move
-        i['jump'] = self.jump
-        i['brch'] = self.branch
-        i['eqal'] = self.equal
-        i['grtr'] = self.greater
-        i['lssr'] = self.lesser
-        i['addd'] = self.add
-        i['subb'] = self.subtract
+        i[1] = self.copy
+        i[2] = self.jump
+        i[3] = self.branch
+        i[4] = self.equal
+        i[5] = self.greater
+        i[6] = self.lesser
+        i[7] = self.add
+        i[8] = self.subtract
 
     # Data Movement Instructions
-    def move(self, A, B):
+    def copy(self):
         """
-        Move data from one place to another
+        Copy data at position A to position B
         """
-        inVal = self.getValue(A)
-        self.setValue(B, inVal)
+        self.next()
+        inAddr = self.getMem()
+        inVal = self.getMem(inAddr)
+        self.next()
+        outAddr = self.getMem()
+        self.setMem(outAddr, inVal)
+        self.next()
 
     # Program Flow instructions
-    def jump(self, A, B):
+    def jump(self):
         """
-        Set the next instruction pointer to be A
-        B is unused
+        Set the next instruction pointer to the value pointed to by A
         """
-        self.setInstructionPointer(A)
+        self.next()
+        inAddr = self.getMem()
+        self.setInstructionPointer(inAddr)
 
-    def branch(self, A, B):
+    def branch(self):
         """
-        Pop the top value off the stack
-        Set the next instruction pointer to be B if it's 0
-        set it to A otherwise
+        Check the value at address A
+        Set the next instruction pointer to be C if it's 0
+        set it to B otherwise
         """
-        testVal = self.pop()
-        if testVal == 0:
-            self.setInstructionPointer(B)
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
+
+        self.next()
+        bAddr = self.getMem()
+
+        self.next()
+        cAddr = self.getMem()
+
+        if aVal == 0:
+            self.setInstructionPointer(cAddr)
         else:
-            self.setInstructionPointer(A)
+            self.setInstructionPointer(bAddr)
+
 
     # Comparison instructions
-    def equal(self, A, B):
+    def equal(self):
         """
         Compare two values for equality
-        Push a 1 to the stack if they're the same, 0 otherwise
+        Write a 1 to address C if the values at address A and B
+        are equal, otherwise write a 0
         """
-        aVal = self.getValue(A)
-        bVal = self.getValue(B)
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
+
+        self.next()
+        bAddr = self.getMem()
+        bVal = self.getMem(bAddr)
+
+        self.next()
+        cAddr = self.getMem()
+
         if aVal == bVal:
-            self.push(1)
+            self.setMem(cAddr, 1)
         else:
-            self.push(0)
+            self.setMem(cAddr, 0)
 
-    def greater(self, A, B):
+        self.next()
+
+    def greater(self):
         """
-        Push a 1 to the stack if A > B, 0 otherwise
+        Compare two values
+        Write a 1 to address C if the value at address A
+        is greater than that at address B, otherwise write a 0
         """
-        aVal = self.getValue(A)
-        bVal = self.getValue(B)
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
+
+        self.next()
+        bAddr = self.getMem()
+        bVal = self.getMem(bAddr)
+
+        self.next()
+        cAddr = self.getMem()
+
         if aVal > bVal:
-            self.push(1)
+            self.setMem(cAddr, 1)
         else:
-            self.push(0)
+            self.setMem(cAddr, 0)
 
-    def lesser(self, A, B):
+        self.next()
+
+    def lesser(self):
         """
-        Push a 1 to the stack if A < B, 0 otherwise
+        Compare two values
+        Write a 1 to address C if the value at address A
+        is less than that at address B, otherwise write a 0
         """
-        aVal = self.getValue(A)
-        bVal = self.getValue(B)
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
+
+        self.next()
+        bAddr = self.getMem()
+        bVal = self.getMem(bAddr)
+
+        self.next()
+        cAddr = self.getMem()
+
         if aVal < bVal:
-            self.push(1)
+            self.setMem(cAddr, 1)
         else:
-            self.push(0)
+            self.setMem(cAddr, 0)
+
+        self.next()
+
 
     # Manipulation Instructions
-    def add(self, A, B):
+    def add(self):
         """
-        Add A to B and push the result to the stack
-        At some point this will have max values for integer operations.
+        Add values at addresses A and B then write it to address pointed to by C
         """
-        aVal = self.getValue(A)
-        bVal = self.getValue(B)
-        self.push(aVal + bVal)
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
 
-    def subtract(self, A, B):
-        """
-        Subtract B from A and push the result to the stack
-        At some point this will have min values for integer operations.
-        """
-        aVal = self.getValue(A)
-        bVal = self.getValue(B)
-        self.push(aVal - bVal)
+        self.next()
+        bAddr = self.getMem()
+        bVal = self.getMem(bAddr)
 
+        self.next()
+        cAddr = self.getMem()
+
+        value = aVal + bVal
+
+        self.setMem(cAddr, value)
+
+        self.next()
+
+    def subtract(self):
+        """
+        Subtract value at addresses B from A then write it to address pointed to by C
+        """
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
+
+        self.next()
+        bAddr = self.getMem()
+        bVal = self.getMem(bAddr)
+
+        self.next()
+        cAddr = self.getMem()
+
+        value = aVal + bVal
+
+        self.setMem(cAddr, value)
+
+        self.next()
 
 if __name__ == '__main__':
     import unittest
