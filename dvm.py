@@ -181,6 +181,24 @@ class DVM(VMBase):
 
         self.next()
 
+    def output(self):
+        """
+        Write the value at address A to the output
+        """
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
+        self.systemOut(aVal)
+
+    def halt(self):
+        """
+        Halt the program
+        """
+        self.next()
+        aAddr = self.getMem()
+        aVal = self.getMem(aAddr)
+        self.systemExit(aVal)
+
 if __name__ == '__main__':
     import unittest
     from tests.testdvm import TestDVM

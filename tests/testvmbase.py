@@ -76,11 +76,11 @@ class TestVMBase(unittest.TestCase):
     def testExit(self):
         self.assertTrue(self.vmbase.running)
         self.assertEqual(self.vmbase.status, 0)
-        self.vmbase.exit(0)
+        self.vmbase.systemExit(0)
         self.assertEqual(self.vmbase.status, 0)
         self.assertFalse(self.vmbase.running)
         self.vmbase.running = True
-        self.vmbase.exit(1)
+        self.vmbase.systemExit(1)
         self.assertEqual(self.vmbase.status, 1)
         self.assertFalse(self.vmbase.running)
 

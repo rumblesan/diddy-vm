@@ -30,11 +30,6 @@ class VMBase(object):
 
         self.position = 101
 
-        self.registers = {}
-        r = self.registers
-        r[0] = self.exit
-        r[1] = self.output
-
         self.running = True
         self.status = 0
 
@@ -78,12 +73,9 @@ class VMBase(object):
         If the memory position corresponds to a register then
         the register function will be called instead
         """
-        if addr in self.registers:
-            self.registers[addr](value)
-        else:
-            self.ram[addr] = value
+        self.ram[addr] = value
 
-    def exit(self, value):
+    def systemExit(self, value):
         """
         Set the running flag to false so the external program loop stops
         Also sets the exit status of the VM
@@ -91,7 +83,7 @@ class VMBase(object):
         self.running = False
         self.status = value
 
-    def output(self, c):
+    def systemOut(self, c):
         """
         Print a char to stdout
         """
