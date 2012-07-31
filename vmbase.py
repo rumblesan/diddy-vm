@@ -10,8 +10,6 @@
 # Instructions can have a variable number of arguments
 # The machines memory width is 16 bits
 
-import sys
-
 class VMBase(object):
 
     def __init__(self):
@@ -21,16 +19,13 @@ class VMBase(object):
         self.position = 100
 
         self.registers = {}
-
         self.registers[0] = self.exit
         self.registers[1] = self.output
 
         self.setupInstructionTable()
 
-    def run(self):
-        while True:
-            print("Running")
-            self.executeNextInstruction()
+        self.running = True
+        self.status = 0
 
     # General purpose functions
     def executeNextInstruction(self):
@@ -64,9 +59,9 @@ class VMBase(object):
         else:
             self.ram[addr] = value
 
-    # TODO Ugly, needs making better
-    def exit(self, val):
-        sys.exit(val)
+    def exit(self, value):
+        self.running = False
+        self.status = value
 
     def output(self, c):
         print(c)

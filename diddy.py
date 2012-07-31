@@ -11,7 +11,10 @@ def main():
 
     dvm.loadProgram(program)
 
-    dvm.run()
+    while dvm.running == True:
+        dvm.executeNextInstruction()
+
+    print("Finished")
 
 
 if __name__ == '__main__':
