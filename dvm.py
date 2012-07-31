@@ -11,6 +11,7 @@ class DVM(VMBase):
 
         i = self.instructions
 
+        i[0] = self.nop
         i[1] = self.copy
         i[2] = self.jump
         i[3] = self.branch
@@ -19,6 +20,15 @@ class DVM(VMBase):
         i[6] = self.lesser
         i[7] = self.add
         i[8] = self.subtract
+        i[9] = self.output
+        i[10] = self.halt
+
+    def nop(self):
+        """
+        No Operation
+        Just increments the position counter
+        """
+        self.next()
 
     # Data Movement Instructions
     def copy(self):
@@ -189,6 +199,7 @@ class DVM(VMBase):
         aAddr = self.getMem()
         aVal = self.getMem(aAddr)
         self.systemOut(aVal)
+        self.next()
 
     def halt(self):
         """
