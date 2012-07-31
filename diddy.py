@@ -11,9 +11,14 @@ def main():
 
     dvm.loadProgram(program)
 
+    print("********")
+    print("\n\n")
+
     while dvm.running == True:
         dvm.executeNextInstruction()
 
+    print("\n\n")
+    print("********")
     print("Finished")
 
 

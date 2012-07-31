@@ -10,6 +10,8 @@
 # Instructions can have a variable number of arguments
 # The machines memory width is 16 bits
 
+import sys
+
 class VMBase(object):
 
     def __init__(self):
@@ -60,11 +62,18 @@ class VMBase(object):
             self.ram[addr] = value
 
     def exit(self, value):
+        """
+        Set the running flag to false so the external program loop stops
+        Also sets the exit status of the VM
+        """
         self.running = False
         self.status = value
 
     def output(self, c):
-        print(c)
+        """
+        Print a char to stdout
+        """
+        sys.stdout.write(chr(c))
 
 
     def loadProgram(self, filename):
