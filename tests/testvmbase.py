@@ -14,6 +14,17 @@ class TestVMBase(unittest.TestCase):
     def test_creation(self):
         self.assertIsInstance(self.vmbase, VMBase)
 
+    def testExecuteNextInstruction(self):
+        self.vmbase.instructions[1] = self.vmStop
+        self.vmbase.running = True
+        self.vmbase.position = 100
+        self.vmbase.ram[100] = 1
+        self.vmbase.executeNextInstruction()
+        self.assertFalse(self.vmbase.running)
+
+    def vmStop(self):
+        self.vmbase.running = False
+
     def testSetInstructionPointer(self):
         self.vmbase.setInstructionPointer(100)
         self.assertEqual(self.vmbase.position, 100)
