@@ -185,7 +185,7 @@ class DVM(VMBase):
         self.next()
         cAddr = self.getMem()
 
-        value = aVal + bVal
+        value = aVal - bVal
 
         self.setMem(cAddr, value)
 
