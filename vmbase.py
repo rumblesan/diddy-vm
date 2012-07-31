@@ -28,7 +28,7 @@ class VMBase(object):
         self.ram = dict.fromkeys(xrange(2 ** 12), 0)
         self.instructions = {}
 
-        self.position = 101
+        self.position = 1
 
         self.running = True
         self.status = 0
@@ -98,7 +98,7 @@ class VMBase(object):
             value = int(line)
             self.setMem(self.position, value)
             self.next()
-        self.setInstructionPointer(101)
+        self.setInstructionPointer(1)
 
 
 
