@@ -14,7 +14,17 @@ import sys
 
 class VMBase(object):
 
+    """
+    The base VM class
+    Contains the internal data structures as well as general purpose methods
+
+    A VM Class with the instruction methods should inherit this
+    """
+
     def __init__(self):
+        """
+        Setup the ram, instruction dictionary and register dictionary
+        """
         self.ram = dict.fromkeys(xrange(2 ** 12), 0)
         self.instructions = {}
 
@@ -45,9 +55,17 @@ class VMBase(object):
         self.position = address
 
     def next(self):
+        """
+        Increments program position counter
+        """
         self.position += 1
 
     def getMem(self, addr=-1):
+        """
+        Retrieve a value from a memory address
+        If no address is given then the value from the
+        position pointer will be retrieved
+        """
         if addr == -1:
             output = self.ram[self.position]
         else:
@@ -55,6 +73,11 @@ class VMBase(object):
         return output
 
     def setMem(self, addr, value):
+        """
+        Set a value in memory
+        If the memory position corresponds to a register then
+        the register function will be called instead
+        """
         if addr in self.registers:
             self.registers[addr](value)
         else:
@@ -76,6 +99,9 @@ class VMBase(object):
 
 
     def loadProgram(self, filename):
+        """
+        Loads a program into memory
+        """
         fp = open(filename)
         for line in fp:
             value = int(line)
