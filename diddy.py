@@ -13,15 +13,8 @@ def main():
 
     dvm.loadProgram(programData)
 
-    print("********")
-    print("\n\n")
-
     while dvm.running == True:
         dvm.executeNextInstruction()
-
-    print("\n\n")
-    print("********")
-    print("Finished")
 
 
 if __name__ == '__main__':
