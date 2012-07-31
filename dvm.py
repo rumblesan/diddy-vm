@@ -5,7 +5,10 @@ from vmbase import VMBase
 
 class DVM(VMBase):
 
-    def setupInstructionTable(self):
+    def __init__(self):
+
+        super(DVM, self).__init__()
+
         i = self.instructions
 
         i[1] = self.copy

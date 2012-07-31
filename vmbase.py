@@ -21,10 +21,9 @@ class VMBase(object):
         self.position = 100
 
         self.registers = {}
-        self.registers[0] = self.exit
-        self.registers[1] = self.output
-
-        self.setupInstructionTable()
+        r = self.registers
+        r[0] = self.exit
+        r[1] = self.output
 
         self.running = True
         self.status = 0

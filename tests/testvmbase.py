@@ -1,19 +1,18 @@
 #!/usr/bin/env python
 
 import unittest
-from dvm import DVM
+from vmbase import VMBase
 
 class TestVMBase(unittest.TestCase):
 
     def setUp(self):
-        # Creating a DVM object but just testing the VMBase methods
-        self.vmbase = DVM()
+        self.vmbase = VMBase()
 
     def tearDown(self):
         del self.vmbase
 
     def test_creation(self):
-        self.assertIsInstance(self.vmbase, DVM)
+        self.assertIsInstance(self.vmbase, VMBase)
 
     def testSetInstructionPointer(self):
         self.vmbase.setInstructionPointer(100)
