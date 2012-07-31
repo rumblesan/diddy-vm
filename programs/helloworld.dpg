@@ -1,0 +1,42 @@
+4       #Equal
+A9
+A10
+A11
+3       #Branch
+A11     #If finished?
+A26     #Goto 26
+A13     #Else 13
+0       #Counter
+13      #String Length
+0       #Finished?
+1       #Increment Value
+1       #Copy
+A30     #String
+R1      #Output Register
+7       #Add
+A12     #1
+A14     #to A13
+A14     #overwrite A13
+7       #Add
+A12     #1
+A9      #to A9
+A9      #overwrite A9
+2       #Jump
+A1
+1       #Copy
+A28     #0
+R0      #Exit Register
+0
+72      #Hello World!\n
+101
+108
+108
+111
+32
+87
+111
+114
+108
+100
+33
+10
