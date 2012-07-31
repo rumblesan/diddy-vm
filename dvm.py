@@ -4,8 +4,28 @@ from vmbase import VMBase
 # This is the class that contains all the instructions for the Diddy VM
 
 class DVM(VMBase):
+    """
+    This contains the methods for each of the VM instructions
+
+        * NOP
+        * Copy
+        * Jump
+        * Branch
+        * Equal
+        * Greater Than
+        * Less Than
+        * Add
+        * Subtract
+        * Output
+        * Halt
+    """
 
     def __init__(self):
+        """
+        The constructor of the VMBase parent class is called to set
+        everything up, then the instructions dictionary is setup
+        in this constructor
+        """
 
         super(DVM, self).__init__()
 
@@ -33,7 +53,7 @@ class DVM(VMBase):
     # Data Movement Instructions
     def copy(self):
         """
-        Copy data at position A to position B
+        Copy data at address A to address B
         """
         self.next()
         inAddr = self.getMem()
@@ -46,7 +66,7 @@ class DVM(VMBase):
     # Program Flow instructions
     def jump(self):
         """
-        Set the next instruction pointer to the value pointed to by A
+        Set the next instruction pointer to the value at address A
         """
         self.next()
         inAddr = self.getMem()
@@ -203,7 +223,7 @@ class DVM(VMBase):
 
     def halt(self):
         """
-        Halt the program
+        Halt the program and set the exit status to the value at address A
         """
         self.next()
         aAddr = self.getMem()
