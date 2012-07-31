@@ -87,11 +87,11 @@ class TestVMBase(unittest.TestCase):
     def testLoadProgram(self):
         programData = ['1', '2', '3', '4']
         self.vmbase.loadProgram(programData)
-        self.assertEqual(self.vmbase.position, 100)
-        self.assertEqual(self.vmbase.ram[100], 1)
-        self.assertEqual(self.vmbase.ram[101], 2)
-        self.assertEqual(self.vmbase.ram[102], 3)
-        self.assertEqual(self.vmbase.ram[103], 4)
+        self.assertEqual(self.vmbase.position, 101)
+        self.assertEqual(self.vmbase.ram[101], 1)
+        self.assertEqual(self.vmbase.ram[102], 2)
+        self.assertEqual(self.vmbase.ram[103], 3)
+        self.assertEqual(self.vmbase.ram[104], 4)
 
 
 
