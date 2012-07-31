@@ -9,7 +9,9 @@ def main():
 
     program = argv[1]
 
-    dvm.loadProgram(program)
+    programData = open(program).read().splitlines()
+
+    dvm.loadProgram(programData)
 
     print("********")
     print("\n\n")

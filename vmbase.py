@@ -98,12 +98,11 @@ class VMBase(object):
         sys.stdout.write(chr(c))
 
 
-    def loadProgram(self, filename):
+    def loadProgram(self, programData):
         """
         Loads a program into memory
         """
-        fp = open(filename)
-        for line in fp:
+        for line in programData:
             value = int(line)
             self.setMem(self.position, value)
             self.next()
