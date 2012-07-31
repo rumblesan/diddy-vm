@@ -18,10 +18,10 @@ def main():
 
         l = strip.search(l).group(1)
 
-        if l[0] == "A":
-            val = 100 + int(l[1:])
-            fp.write(str(val) + "\n")
-        elif l[0] == "R":
+        # If this is an address, remove the A at the front
+        if not l:
+            fp.write("0\n")
+        elif l[0] == "A":
             val = int(l[1:])
             fp.write(str(val) + "\n")
         else:

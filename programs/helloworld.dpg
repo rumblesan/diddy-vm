@@ -10,23 +10,23 @@ A13     #Else 13
 13      #String Length
 0       #Finished?
 1       #Increment Value
-1       #Copy
+9       #Output
 A30     #String
-R1      #Output Register
+
 7       #Add
 A12     #1
-A14     #to A13
-A14     #overwrite A13
+A14     #to A14
+A14     #overwrite A14
 7       #Add
 A12     #1
 A9      #to A9
 A9      #overwrite A9
 2       #Jump
 A1
-1       #Copy
+10      #Halt
 A28     #0
-R0      #Exit Register
 0
+
 72      #Hello World!\n
 101
 108
