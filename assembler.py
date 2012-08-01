@@ -27,7 +27,7 @@ def calculateLabels(programData):
     return labels
 
 
-def assembleProgram(programData, labels):
+def assembleProgram(programData, labels, instructions):
 
     output = ""
 
@@ -39,10 +39,31 @@ def assembleProgram(programData, labels):
             output += "0\n"
         elif data in labels:
             output += str(labels[data]) + "\n"
+        elif data in instructions:
+            output += str(instructions[data]) + "\n"
         else:
             output += str(data) + "\n"
 
     return output
+
+def setupInstructions():
+
+    i = {}
+
+    i['NOP'] =      0
+    i['COPY'] =     1
+    i['JUMP'] =     2
+    i['BRANCH'] =   3
+    i['EQUAL'] =    4
+    i['GREATER'] =  5
+    i['LESSER'] =   6
+    i['ADD'] =      7
+    i['SUBTRACT'] = 8
+    i['OUTPUT'] =   9
+    i['HALT'] =     10
+
+    return i
+
 
 def main():
 
@@ -56,9 +77,11 @@ def main():
     with open(inputFile) as ifp:
         programData = ifp.read().splitlines()
 
+    instructions = setupInstructions()
+
     labels = calculateLabels(programData)
 
-    program = assembleProgram(programData, labels)
+    program = assembleProgram(programData, labels, instructions)
 
     ofp.write(program)
 

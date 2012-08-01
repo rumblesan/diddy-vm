@@ -1,32 +1,32 @@
-start:      4       #Equal
+start:      EQUAL
             counter
             length
             finished
-            3       #Branch
+            BRANCH
             finished
             exit
             print
 counter:    0
-length:     13
+length:     13      #Length of the output we're outputting
 finished:   0
 one:        1       #Increment Value
-print:      9
+print:      OUTPUT
 output:     data
-
-            7       #Add
+            NOP
+            ADD
             one
             output
             output
-            7       #Add
+            ADD
             one
             counter
             counter
-            2       #Jump
+            JUMP
             start
-exit:       10      #Halt
-            28      #0
+exit:       HALT
+            28
             0
-
+            NOP
 data:       72      #Hello World!\n
             101
             108
