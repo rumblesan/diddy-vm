@@ -4,6 +4,9 @@ import re
 from argparse import ArgumentParser
 from os.path import basename, splitext, join
 
+lineParse = re.compile('^((?P<label>[a-zA-Z0-9]*): *| *)(?P<data>[a-zA-Z0-9]*)')
+
+
 def parseArgs():
     parser = ArgumentParser(description='Assemble DiddyVM Program')
     parser.add_argument('program', help='The program to assemble')
@@ -11,26 +14,35 @@ def parseArgs():
 
     return args
 
+def calculateLabels(programData):
+
+    labels = {}
+    num = 1
+    for line in programData:
+        label = lineParse.search(line).group('label')
+        if label:
+            labels[label] = num
+        num += 1
+
+    return labels
 
 
-def assembleProgram(programData, output):
+def assembleProgram(programData, labels):
 
-    strip = re.compile('(^[a-zA-Z0-9]*)')
+    output = ""
 
-    for l in programData:
+    for line in programData:
 
-        l = strip.search(l).group(1)
+        data = lineParse.search(line).group('data')
 
-        # If this is an address, remove the A at the front
-        if not l:
-            output.write("0\n")
-        elif l[0] == "A":
-            val = int(l[1:])
-            output.write(str(val) + "\n")
+        if not line:
+            output += "0\n"
+        elif data in labels:
+            output += str(labels[data]) + "\n"
         else:
-            output.write(l + "\n")
+            output += str(data) + "\n"
 
-
+    return output
 
 def main():
 
@@ -41,10 +53,14 @@ def main():
     outputName  = join('compiled', splitext(fileName)[0] + '.dcp')
 
     ofp = open(outputName, 'w')
-
     with open(inputFile) as ifp:
         programData = ifp.read().splitlines()
-        assembleProgram(programData, ofp)
+
+    labels = calculateLabels(programData)
+
+    program = assembleProgram(programData, labels)
+
+    ofp.write(program)
 
     ifp.close()
     ofp.close()

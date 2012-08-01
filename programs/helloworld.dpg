@@ -1,42 +1,42 @@
-4       #Equal
-A9
-A10
-A11
-3       #Branch
-A11     #If finished?
-A26     #Goto 26
-A13     #Else 13
-0       #Counter
-13      #String Length
-0       #Finished?
-1       #Increment Value
-9       #Output
-A30     #String
+start:      4       #Equal
+            counter
+            length
+            finished
+            3       #Branch
+            finished
+            exit
+            print
+counter:    0
+length:     13
+finished:   0
+one:        1       #Increment Value
+print:      9
+output:     data
 
-7       #Add
-A12     #1
-A14     #to A14
-A14     #overwrite A14
-7       #Add
-A12     #1
-A9      #to A9
-A9      #overwrite A9
-2       #Jump
-A1
-10      #Halt
-A28     #0
-0
+            7       #Add
+            one
+            output
+            output
+            7       #Add
+            one
+            counter
+            counter
+            2       #Jump
+            start
+exit:       10      #Halt
+            28      #0
+            0
 
-72      #Hello World!\n
-101
-108
-108
-111
-32
-87
-111
-114
-108
-100
-33
-10
+data:       72      #Hello World!\n
+            101
+            108
+            108
+            111
+            32
+            87
+            111
+            114
+            108
+            100
+            33
+            10
