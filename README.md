@@ -3,6 +3,8 @@ Diddy VM
 
 The Diddy VM is a project so I can learn more about writing virtual machines. It's not necessarily going to be the greatest piece of code ever but hopefully it should teach me a bunch of stuff.
 
+![Diddy-VM](rumblesan.github.com/diddy-vm/img/diddy.jpg)
+
 Aim
 ---
 
