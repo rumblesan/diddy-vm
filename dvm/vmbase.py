@@ -93,9 +93,9 @@ class VMBase(object):
     def loadProgram(self, programData):
         """
         Loads a program into memory
+        The programdata should be a list of integers
         """
-        for line in programData:
-            value = int(line)
+        for value in programData:
             self.setMem(self.position, value)
             self.next()
         self.setInstructionPointer(1)
