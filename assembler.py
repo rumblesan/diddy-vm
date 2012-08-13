@@ -4,6 +4,8 @@ import re
 from argparse import ArgumentParser
 from os.path import basename, splitext, join
 
+from struct import pack
+
 lineParse = re.compile('^((?P<label>[a-zA-Z0-9]*): *| *)(?P<data>[a-zA-Z0-9]*)')
 
 
@@ -29,20 +31,20 @@ def calculateLabels(programData):
 
 def assembleProgram(programData, labels, instructions):
 
-    output = ""
+    output = []
 
     for line in programData:
 
         data = lineParse.search(line).group('data')
 
         if not line:
-            output += "0\n"
+            output.append(0)
         elif data in labels:
-            output += str(labels[data]) + "\n"
+            output.append(labels[data])
         elif data in instructions:
-            output += str(instructions[data]) + "\n"
+            output.append(instructions[data])
         else:
-            output += str(data) + "\n"
+            output.append(int(data))
 
     return output
 
@@ -83,7 +85,8 @@ def main():
 
     program = assembleProgram(programData, labels, instructions)
 
-    ofp.write(program)
+    for datum in program:
+        ofp.write(pack('>I', datum))
 
     ifp.close()
     ofp.close()
