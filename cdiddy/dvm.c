@@ -171,13 +171,3 @@ void halt(DVM dvm) {
     system_exit(dvm, aVal);
 }
 
-
-int main(int argc, char *argv[]) {
-    DVM dvm = (DVM) setup_diddyvm();
-    next(dvm);
-    next(dvm);
-    cleanup_dvm(dvm);
-
-    return 0;
-}
-

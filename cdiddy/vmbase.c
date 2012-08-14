@@ -60,22 +60,11 @@ void system_out(DVM dvm, int c) {
 }
 
 void load_program(DVM dvm, char *program_data) {
+
 }
 
 void cleanup_dvm(DVM dvm) {
     free(dvm->ram);
     free(dvm);
 }
-
-/*
-int main(int argc, char *argv[]) {
-    DVM dvm = (DVM) setup_vmbase();
-    next(dvm);
-    next(dvm);
-    cleanup_dvm(dvm);
-
-    return 0;
-}
-*/
-
 
