@@ -57,6 +57,7 @@ void system_exit(DVM dvm, int value) {
 
 void system_out(DVM dvm, int c) {
     putchar(c);
+    next(dvm);
 }
 
 void load_program(DVM dvm, char *program_data) {
