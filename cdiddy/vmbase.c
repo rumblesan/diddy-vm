@@ -18,6 +18,9 @@ DVM setup_vmbase() {
     dvm->position     = 1;
     dvm->running      = 1;
     dvm->status       = 0;
+
+    dvm->program_length = 0;
+
     return dvm;
 }
 
@@ -60,8 +63,22 @@ void system_out(DVM dvm, int c) {
     next(dvm);
 }
 
-void load_program(DVM dvm, char *program_data) {
+void load_program(DVM dvm, int *program_data, int length) {
 
+    int i;
+    for (i = 0; i < length; i++) {
+        setMem(dvm, dvm->position, program_data[i]);
+        next(dvm);
+    }
+    dvm->program_length = length;
+    set_instruction_pointer(dvm, 1);
+}
+
+void dump_program(DVM dvm) {
+    int i;
+    for (i = 0; i < dvm->program_length; i++) {
+        printf("%i\n", getMem(dvm, i));
+    }
 }
 
 void cleanup_dvm(DVM dvm) {

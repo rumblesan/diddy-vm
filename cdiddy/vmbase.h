@@ -15,6 +15,8 @@ typedef struct diddyvm {
 
     int status;
 
+    int program_length;
+
 } DVM_Data;
 
 DVM setup_vmbase();
@@ -33,7 +35,9 @@ void system_exit(DVM dvm, int value);
 
 void system_out(DVM dvm, int c);
 
-void load_program(DVM dvm, char *program_data);
+void load_program(DVM dvm, int *program_data, int length);
+
+void dump_program(DVM dvm);
 
 void cleanup_dvm(DVM dvm);
 
