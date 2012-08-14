@@ -1,21 +1,21 @@
 #include "dvm.h"
 #include "vmbase.h"
 
-DVM setup_diddyvm() {
+DVM setup_diddy() {
 
     DVM dvm = setup_vmbase();
 
     dvm->instructions[0] = nop;
-    dvm->instructions[0] = copy;
-    dvm->instructions[0] = jump;
-    dvm->instructions[0] = branch;
-    dvm->instructions[0] = equal;
-    dvm->instructions[0] = greater;
-    dvm->instructions[0] = lesser;
-    dvm->instructions[0] = add;
-    dvm->instructions[0] = subtract;
-    dvm->instructions[0] = output;
-    dvm->instructions[0] = halt;
+    dvm->instructions[1] = copy;
+    dvm->instructions[2] = jump;
+    dvm->instructions[3] = branch;
+    dvm->instructions[4] = equal;
+    dvm->instructions[5] = greater;
+    dvm->instructions[6] = lesser;
+    dvm->instructions[7] = add;
+    dvm->instructions[8] = subtract;
+    dvm->instructions[9] = output;
+    dvm->instructions[10] = halt;
 
     return dvm;
 }
