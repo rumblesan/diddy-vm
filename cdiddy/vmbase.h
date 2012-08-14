@@ -7,7 +7,7 @@ typedef struct diddyvm {
     int *ram;
 
     // Create an array that will store function pointers
-    void (*instructions[10]) (DVM dvm);
+    void (*instructions[11]) (DVM dvm);
 
     int position;
 
