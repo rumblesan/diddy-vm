@@ -85,7 +85,7 @@ class TestVMBase(unittest.TestCase):
         self.assertFalse(self.vmbase.running)
 
     def testLoadProgram(self):
-        programData = ['1', '2', '3', '4']
+        programData = [1, 2, 3, 4]
         self.vmbase.loadProgram(programData)
         self.assertEqual(self.vmbase.ram[1], 1)
         self.assertEqual(self.vmbase.ram[2], 2)
