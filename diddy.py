@@ -18,7 +18,7 @@ def main():
     # it to an array.
     with open(program) as fp:
         for block in iter(lambda: fp.read(4), ""):
-            value = unpack('>I', block)[0]
+            value = unpack('@I', block)[0]
             programData.append(value)
 
 

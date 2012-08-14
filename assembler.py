@@ -86,7 +86,7 @@ def main():
     program = assembleProgram(programData, labels, instructions)
 
     for datum in program:
-        ofp.write(pack('>I', datum))
+        ofp.write(pack('@I', datum))
 
     ifp.close()
     ofp.close()
