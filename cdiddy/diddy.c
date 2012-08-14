@@ -3,6 +3,8 @@
 #include <unistd.h>
 
 #include "diddy.h"
+#include "dvm.h"
+#include "vmbase.h"
 
 void usage(int exitval) {
     printf("Diddy usage:\n");
@@ -43,7 +45,6 @@ int main(int argc, char *argv[]) {
 	int *buffer;
 	unsigned long fileLen;
 
-
     Args args = parse_args(argc, argv);
 
     printf("Opening file %s\n", args.input_file);
@@ -58,10 +59,13 @@ int main(int argc, char *argv[]) {
 	
 	//Get file length
 	fseek(file, 0, SEEK_END);
-	fileLen = ftell(file);
+    //We want file length in ints
+    //means byte length divided by 4
+    //minus 1 for EOF signifier
+	fileLen = (ftell(file) - 1) / 4;
 	fseek(file, 0, SEEK_SET);
 
-    fprintf(stdout, "File is %lu bytes long\n", fileLen);
+    fprintf(stdout, "File is %lu ints long\n", fileLen);
 
 	//Allocate memory
 	buffer = (int*) malloc(sizeof(int) * fileLen);
@@ -72,18 +76,26 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	//Read file contents into buffer
-	fread(buffer, fileLen, 1, file);
-	fclose(file);
-
+	//Read file contents as ints into buffer
     int i;
-
-    for(i = 0; i < fileLen; i++) {
-        printf("%c", ((char *)buffer)[i]);
+    int temp;
+    for (i = 0; i < fileLen; i++) {
+        fread(&buffer[i], sizeof(int), 1, file);
     }
 
+    DVM dvm = setup_diddy();
+    load_program(dvm, buffer, fileLen);
+
+	fclose(file);
 
     free(buffer);
+
+    //dump_program(dvm);
+
+
+    while (dvm->running == 1) {
+        execute_next_instruction(dvm);
+    }
 
     return 0;
 
