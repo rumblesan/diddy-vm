@@ -1,1 +1,0 @@
-clang -o diddyvm diddy.c dvm.c vmbase.c
