@@ -78,7 +78,6 @@ int main(int argc, char *argv[]) {
 
 	//Read file contents as ints into buffer
     int i;
-    int temp;
     for (i = 0; i < fileLen; i++) {
         fread(&buffer[i], sizeof(int), 1, file);
     }
