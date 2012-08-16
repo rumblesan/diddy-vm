@@ -92,7 +92,7 @@ There is an assembler that will convert fairly low level machine code into the b
 The example helloworld program is in the programs folder. This needs to be run through the assembler, which takes the path to the file as it's only argument. The assembled program is written out to the **compiled** folder.
 
 ## Running Programs
-To run a program in the P-Diddy VM, use the diddy.py script and pass the path to the assembled program file as the only argument. To run it on C-Diddy you need to first compile it and then pass in the assembled program with the -i flag (Inconsistent I know, blame my C skills)
+To run a program in the P-Diddy VM, use the diddy.py script and pass the path to the assembled program file as the only argument. To run it on C-Diddy you need to first compile it. Once that's done, call the cdiddy executable that's been created and pass in the compiled program name as an argument.
 
 ## Future
 There are a few things I want to do with the base VM in future, other than fix all the small niggly problems.
