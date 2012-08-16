@@ -8,7 +8,7 @@
 
 void usage(int exitval) {
     printf("Diddy usage:\n");
-    printf("diddy -i input_file\n");
+    printf("diddy input_file\n");
     exit(exitval);
 }
 
@@ -17,16 +17,18 @@ Args parse_args(int argc, char *argv[]) {
     Args args = {""};
 
     int c;
-    while ( (c = getopt(argc, argv, "i:h")) != -1) {
+    while ( (c = getopt(argc, argv, "h?")) != -1) {
         switch (c)
         {
-            case 'i':
-                args.input_file = optarg;
-                break;
+            case '?':
             case 'h':
                 usage(0);
                 break;
         }
+    }
+
+    if (optind < argc) {
+        args.input_file = argv[optind];
     }
 
     if (*args.input_file == '\0') {
