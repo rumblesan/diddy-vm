@@ -92,6 +92,11 @@ class TestVMBase(unittest.TestCase):
         self.assertEqual(self.vmbase.ram[3], 3)
         self.assertEqual(self.vmbase.ram[4], 4)
 
-
-
+    def testStack(self):
+        self.vmbase.pushStack(1)
+        self.vmbase.pushStack(2)
+        self.vmbase.pushStack(3)
+        self.assertEqual(self.vmbase.popStack(), 3)
+        self.assertEqual(self.vmbase.popStack(), 2)
+        self.assertEqual(self.vmbase.popStack(), 1)
 

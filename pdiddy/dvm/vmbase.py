@@ -33,6 +33,8 @@ class VMBase(object):
         self.running = True
         self.status = 0
 
+        self.stack = []
+
     # General purpose functions
     def executeNextInstruction(self):
         """
@@ -100,7 +102,19 @@ class VMBase(object):
             self.next()
         self.setInstructionPointer(1)
 
+    def pushStack(self, data):
+        """
+        Push a value onto the VM stack
+        data should be an integer
+        """
+        return self.stack.append(data)
 
+    def popStack(self):
+        """
+        Pop a value off the VM stack
+        data should be an integer
+        """
+        return self.stack.pop()
 
 if __name__ == '__main__':
     import unittest
