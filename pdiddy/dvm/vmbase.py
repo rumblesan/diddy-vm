@@ -35,14 +35,22 @@ class VMBase(object):
 
         self.stack = []
 
+        self.instruction_mask = 31 << 28
+        self.flag_mask = 3 << 26
+        self.data_mask = ~(127 << 26)
+
     # General purpose functions
     def executeNextInstruction(self):
         """
         Retrieves the value from the memory location pointed to
         by the position pointer and executes it
         """
-        inst = self.ram[self.position]
-        self.instructions[inst]()
+        bits = self.ram[self.position]
+        inst = bits & self.instruction_mask
+        print("instruction", inst, bits, self.position)
+        data = bits & self.data_mask
+
+        self.instructions[inst](data)
 
 
     def setInstructionPointer(self, address):

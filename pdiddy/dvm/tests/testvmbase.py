@@ -15,14 +15,14 @@ class TestVMBase(unittest.TestCase):
         self.assertIsInstance(self.vmbase, VMBase)
 
     def testExecuteNextInstruction(self):
-        self.vmbase.instructions[1] = self.vmStop
+        self.vmbase.instructions[1 << 28] = self.vmStop
         self.vmbase.running = True
         self.vmbase.position = 100
-        self.vmbase.ram[100] = 1
+        self.vmbase.ram[100] = 1 << 28
         self.vmbase.executeNextInstruction()
         self.assertFalse(self.vmbase.running)
 
-    def vmStop(self):
+    def vmStop(self, data):
         self.vmbase.running = False
 
     def testSetInstructionPointer(self):
