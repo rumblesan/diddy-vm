@@ -31,17 +31,18 @@ class DVM(VMBase):
 
         i = self.instructions
 
-        i[0] = self.nop
-        i[1] = self.copy
-        i[2] = self.jump
-        i[3] = self.branch
-        i[4] = self.equal
-        i[5] = self.greater
-        i[6] = self.lesser
-        i[7] = self.add
-        i[8] = self.subtract
-        i[9] = self.output
-        i[10] = self.halt
+        i[0 << 28] = self.nop
+        i[1 << 28] = self.push
+        i[2 << 28] = self.pop
+        i[3 << 28] = self.jump
+        i[4 << 28] = self.branch
+        i[5 << 28] = self.equal
+        i[6 << 28] = self.greater
+        i[7 << 28] = self.lesser
+        i[8 << 28] = self.add
+        i[9 << 28] = self.subtract
+        i[10 << 28] = self.output
+        i[11 << 28] = self.halt
 
     def nop(self):
         """
@@ -51,184 +52,155 @@ class DVM(VMBase):
         self.next()
 
     # Data Movement Instructions
-    def copy(self):
+    def push(self, bits):
         """
-        Copy data at address A to address B
+        Push data onto the stack
+        The data in the instruction is either the value
+        to push onto the stack, or the address
+        pointer to the value
         """
+        flags = (bits & self.flag_mask) >> 26
+        data = bits & self.data_mask
+        if flags == 0:
+            self.pushStack(data)
+        elif flags == 1:
+            self.pushStack(self.getMem(data))
         self.next()
-        inAddr = self.getMem()
-        inVal = self.getMem(inAddr)
-        self.next()
-        outAddr = self.getMem()
-        self.setMem(outAddr, inVal)
+
+    def pop(self, bits):
+        """
+        Pop the top value off the stack and load it into
+        the memory location specified by the data value
+        """
+        self.setMem(bits & self.data_mask, self.popStack())
         self.next()
 
     # Program Flow instructions
-    def jump(self):
+    def jump(self, bits):
         """
-        Set the next instruction pointer to the value at address A
+        Set the value of the instruction pointer
+        Either to the data value, or to the top value
+        of the stack, depending on the instruction flags
         """
-        self.next()
-        inAddr = self.getMem()
-        self.setInstructionPointer(inAddr)
+        flags = (bits & self.flag_mask) >> 26
+        data = bits & self.data_mask
+        if flags == 0:
+            self.setInstructionPointer(data)
+        elif flags == 1:
+            self.setInstructionPointer(self.popStack())
 
-    def branch(self):
+    def branch(self, bits):
         """
-        Check the value at address A
-        Set the next instruction pointer to be C if it's 0
-        set it to B otherwise
+        Check the value ontop of the stack
+        Jump the instruction pointer if it's not 0
+        Set it to either the data value, or the next
+        value on the stack, depending on the flags
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-
-        self.next()
-        bAddr = self.getMem()
-
-        self.next()
-        cAddr = self.getMem()
-
-        if aVal == 0:
-            self.setInstructionPointer(cAddr)
+        flags = (bits & self.flag_mask) >> 26
+        data = bits & self.data_mask
+        test = self.popStack()
+        if test != 0:
+            if flags == 0:
+                self.setInstructionPointer(data)
+            elif flags == 1:
+                self.setInstructionPointer(self.popStack())
         else:
-            self.setInstructionPointer(bAddr)
-
+            self.next()
 
     # Comparison instructions
-    def equal(self):
+    def equal(self, bits):
         """
-        Compare two values for equality
-        Write a 1 to address C if the values at address A and B
-        are equal, otherwise write a 0
+        Compare the two values ontop of the stack
+        If they're equal then push a 1 onto the stack
+        Otherwise push a 0
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-
-        self.next()
-        bAddr = self.getMem()
-        bVal = self.getMem(bAddr)
-
-        self.next()
-        cAddr = self.getMem()
+        aVal = self.popStack()
+        bVal = self.popStack()
 
         if aVal == bVal:
-            self.setMem(cAddr, 1)
+            self.pushStack(1)
         else:
-            self.setMem(cAddr, 0)
+            self.pushStack(0)
 
         self.next()
 
-    def greater(self):
+    def greater(self, bits):
         """
-        Compare two values
-        Write a 1 to address C if the value at address A
-        is greater than that at address B, otherwise write a 0
+        Compare two values ontop of the stack
+        Push a 1 onto the stack if the first value
+        is greater than the second, otherwise write a 0
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-
-        self.next()
-        bAddr = self.getMem()
-        bVal = self.getMem(bAddr)
-
-        self.next()
-        cAddr = self.getMem()
+        aVal = self.popStack()
+        bVal = self.popStack()
 
         if aVal > bVal:
-            self.setMem(cAddr, 1)
+            self.pushStack(1)
         else:
-            self.setMem(cAddr, 0)
+            self.pushStack(0)
 
         self.next()
 
-    def lesser(self):
+    def lesser(self, bits):
         """
-        Compare two values
-        Write a 1 to address C if the value at address A
-        is less than that at address B, otherwise write a 0
+        Compare two values ontop of the stack
+        Push a 1 onto the stack if the first value
+        is less than the second, otherwise write a 0
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-
-        self.next()
-        bAddr = self.getMem()
-        bVal = self.getMem(bAddr)
-
-        self.next()
-        cAddr = self.getMem()
+        aVal = self.popStack()
+        bVal = self.popStack()
 
         if aVal < bVal:
-            self.setMem(cAddr, 1)
+            self.pushStack(1)
         else:
-            self.setMem(cAddr, 0)
+            self.pushStack(0)
 
         self.next()
-
 
     # Manipulation Instructions
-    def add(self):
+    def add(self, bits):
         """
-        Add values at addresses A and B then write it to address pointed to by C
+        Add the top two values on the stack then push
+        the result back onto the stack
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-
-        self.next()
-        bAddr = self.getMem()
-        bVal = self.getMem(bAddr)
-
-        self.next()
-        cAddr = self.getMem()
-
-        value = aVal + bVal
-
-        self.setMem(cAddr, value)
-
+        aVal = self.popStack()
+        bVal = self.popStack()
+        self.pushStack(aVal + bVal)
         self.next()
 
-    def subtract(self):
+    def subtract(self, bits):
         """
-        Subtract value at addresses B from A then write it to address pointed to by C
+        Subtract the second value on the stack from
+        the first then push the result back onto the stack
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-
-        self.next()
-        bAddr = self.getMem()
-        bVal = self.getMem(bAddr)
-
-        self.next()
-        cAddr = self.getMem()
-
-        value = aVal - bVal
-
-        self.setMem(cAddr, value)
-
+        aVal = self.popStack()
+        bVal = self.popStack()
+        self.pushStack(aVal - bVal)
         self.next()
 
-    def output(self):
+    def output(self, bits):
         """
-        Write the value at address A to the output
+        Write a value to the output
+        Either the top value on the stack, or the data value
+        depending on the flags
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-        self.systemOut(aVal)
+        flags = (bits & self.flag_mask) >> 26
+        data = bits & self.data_mask
+        if flags == 0:
+            self.systemOut(data)
+        elif flags == 1:
+            self.systemOut(self.popStack())
         self.next()
 
-    def halt(self):
+    def halt(self, bits):
         """
         Halt the program and set the exit status to the value at address A
         """
-        self.next()
-        aAddr = self.getMem()
-        aVal = self.getMem(aAddr)
-        self.systemExit(aVal)
+        flags = (bits & self.flag_mask) >> 26
+        data = bits & self.data_mask
+        if flags == 0:
+            self.systemExit(data)
+        elif flags == 1:
+            self.systemExit(self.popStack())
 
 if __name__ == '__main__':
     import unittest
