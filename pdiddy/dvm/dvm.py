@@ -84,10 +84,10 @@ class DVM(VMBase):
         of the stack, depending on the instruction flags
         """
         value = 0
-        if bits & self.stack_flag:
-            value = self.popStack()
-        else:
+        if bits & self.data_flag:
             value = bits & self.data_mask
+        else:
+            value = self.popStack()
         if bits & self.pointer_flag:
             value = self.getMem(value)
         self.setInstructionPointer(value)
@@ -101,10 +101,10 @@ class DVM(VMBase):
         """
         if self.popStack():
             value = 0
-            if bits & self.stack_flag:
-                value = self.popStack()
-            else:
+            if bits & self.data_flag:
                 value = bits & self.data_mask
+            else:
+                value = self.popStack()
             if bits & self.pointer_flag:
                 value = self.getMem(value)
             self.setInstructionPointer(value)
@@ -187,10 +187,10 @@ class DVM(VMBase):
         Either the top value on the stack, or the data value
         depending on the flags
         """
-        if bits & self.stack_flag:
-            value = self.popStack()
-        else:
+        if bits & self.data_flag:
             value = bits & self.data_mask
+        else:
+            value = self.popStack()
         if bits & self.pointer_flag:
             value = self.getMem(value)
         self.systemOut(value)
@@ -200,10 +200,10 @@ class DVM(VMBase):
         """
         Halt the program and set the exit status to the value at address A
         """
-        if bits & self.stack_flag:
-            value = self.popStack()
-        else:
+        if bits & self.data_flag:
             value = bits & self.data_mask
+        else:
+            value = self.popStack()
         if bits & self.pointer_flag:
             value = self.getMem(value)
         self.systemExit(value)
