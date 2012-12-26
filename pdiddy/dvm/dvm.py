@@ -59,12 +59,13 @@ class DVM(VMBase):
         to push onto the stack, or the address
         pointer to the value
         """
-        flags = (bits & self.flag_mask) >> 26
         data = bits & self.data_mask
-        if flags == 0:
-            self.pushStack(data)
-        elif flags == 1:
-            self.pushStack(self.getMem(data))
+        value = 0
+        if bits & self.pointer_flag:
+            value = self.getMem(data)
+        else:
+            value = data
+        self.pushStack(value)
         self.next()
 
     def pop(self, bits):
@@ -82,12 +83,14 @@ class DVM(VMBase):
         Either to the data value, or to the top value
         of the stack, depending on the instruction flags
         """
-        flags = (bits & self.flag_mask) >> 26
-        data = bits & self.data_mask
-        if flags == 0:
-            self.setInstructionPointer(data)
-        elif flags == 1:
-            self.setInstructionPointer(self.popStack())
+        value = 0
+        if bits & self.stack_flag:
+            value = self.popStack()
+        else:
+            value = bits & self.data_mask
+        if bits & self.pointer_flag:
+            value = self.getMem(value)
+        self.setInstructionPointer(value)
 
     def branch(self, bits):
         """
@@ -96,14 +99,15 @@ class DVM(VMBase):
         Set it to either the data value, or the next
         value on the stack, depending on the flags
         """
-        flags = (bits & self.flag_mask) >> 26
-        data = bits & self.data_mask
-        test = self.popStack()
-        if test != 0:
-            if flags == 0:
-                self.setInstructionPointer(data)
-            elif flags == 1:
-                self.setInstructionPointer(self.popStack())
+        if self.popStack():
+            value = 0
+            if bits & self.stack_flag:
+                value = self.popStack()
+            else:
+                value = bits & self.data_mask
+            if bits & self.pointer_flag:
+                value = self.getMem(value)
+            self.setInstructionPointer(value)
         else:
             self.next()
 
@@ -183,24 +187,26 @@ class DVM(VMBase):
         Either the top value on the stack, or the data value
         depending on the flags
         """
-        flags = (bits & self.flag_mask) >> 26
-        data = bits & self.data_mask
-        if flags == 0:
-            self.systemOut(data)
-        elif flags == 1:
-            self.systemOut(self.popStack())
+        if bits & self.stack_flag:
+            value = self.popStack()
+        else:
+            value = bits & self.data_mask
+        if bits & self.pointer_flag:
+            value = self.getMem(value)
+        self.systemOut(value)
         self.next()
 
     def halt(self, bits):
         """
         Halt the program and set the exit status to the value at address A
         """
-        flags = (bits & self.flag_mask) >> 26
-        data = bits & self.data_mask
-        if flags == 0:
-            self.systemExit(data)
-        elif flags == 1:
-            self.systemExit(self.popStack())
+        if bits & self.stack_flag:
+            value = self.popStack()
+        else:
+            value = bits & self.data_mask
+        if bits & self.pointer_flag:
+            value = self.getMem(value)
+        self.systemExit(value)
 
 if __name__ == '__main__':
     import unittest

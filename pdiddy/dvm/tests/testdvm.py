@@ -19,17 +19,20 @@ class TestDVM(unittest.TestCase):
         self.dvm.nop()
         self.assertEqual(self.dvm.position, 2)
 
-    def testPush(self):
+    def testPushValue(self):
         self.dvm.position = 1
-        self.dvm.push(15)
+        self.dvm.push(10)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.stack[0], 10)
+        self.assertEqual(self.dvm.position, 2)
+
+    def testPushPointer(self):
+        self.dvm.position = 1
+        self.dvm.setMem(4, 15)
+        self.dvm.push(self.dvm.pointer_flag | 4)
         self.assertEqual(len(self.dvm.stack), 1)
         self.assertEqual(self.dvm.stack[0], 15)
         self.assertEqual(self.dvm.position, 2)
-        self.dvm.setMem(4, 15)
-        self.dvm.push((1 << 26) | 4)
-        self.assertEqual(len(self.dvm.stack), 2)
-        self.assertEqual(self.dvm.stack[1], 15)
-        self.assertEqual(self.dvm.position, 3)
 
     def testPop(self):
         self.dvm.position = 1
@@ -44,13 +47,25 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.getMem(3), 1)
         self.assertEqual(self.dvm.position, 4)
 
-    def testJump(self):
+    def testJumpData(self):
         self.dvm.position = 1
         self.dvm.jump(10)
         self.assertEqual(self.dvm.position, 10)
+
+    def testJumpStack(self):
+        self.dvm.position = 1
         self.dvm.pushStack(15)
-        self.dvm.jump(1 << 26)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.dvm.jump(self.dvm.stack_flag)
+        self.assertEqual(len(self.dvm.stack), 0)
         self.assertEqual(self.dvm.position, 15)
+
+    def testJumpPointer(self):
+        self.dvm.position = 1
+        self.dvm.setMem(4, 10)
+        self.dvm.pushStack(4)
+        self.dvm.jump(self.dvm.stack_flag | self.dvm.pointer_flag)
+        self.assertEqual(self.dvm.position, 10)
 
     def testBranchTrueData(self):
         self.dvm.position = 1
@@ -63,7 +78,15 @@ class TestDVM(unittest.TestCase):
         self.dvm.position = 1
         self.dvm.pushStack(10)
         self.dvm.pushStack(1)
-        self.dvm.branch(1 << 26)
+        self.dvm.branch(self.dvm.stack_flag)
+        self.assertEqual(len(self.dvm.stack), 0)
+        self.assertEqual(self.dvm.position, 10)
+
+    def testBranchTrueDataPointer(self):
+        self.dvm.position = 1
+        self.dvm.pushStack(1)
+        self.dvm.setMem(15, 10)
+        self.dvm.branch(self.dvm.pointer_flag | 15)
         self.assertEqual(len(self.dvm.stack), 0)
         self.assertEqual(self.dvm.position, 10)
 
@@ -151,15 +174,24 @@ class TestDVM(unittest.TestCase):
         self.dvm.pushStack(5)
         self.assertEqual(self.dvm.status, 0)
         self.assertTrue(self.dvm.running)
-        self.dvm.halt(0)
-        self.assertFalse(self.dvm.running)
+        self.dvm.halt(self.dvm.stack_flag | 5)
         self.assertEqual(self.dvm.status, 5)
+        self.assertFalse(self.dvm.running)
 
     def testHaltData(self):
         self.dvm.position = 1
         self.assertEqual(self.dvm.status, 0)
         self.assertTrue(self.dvm.running)
-        self.dvm.halt((1 << 26) | 5)
-        self.assertFalse(self.dvm.running)
+        self.dvm.halt(5)
         self.assertEqual(self.dvm.status, 5)
+        self.assertFalse(self.dvm.running)
+
+    def testHaltPointer(self):
+        self.dvm.position = 1
+        self.assertEqual(self.dvm.status, 0)
+        self.assertTrue(self.dvm.running)
+        self.dvm.setMem(10, 5)
+        self.dvm.halt(10 | self.dvm.pointer_flag)
+        self.assertEqual(self.dvm.status, 5)
+        self.assertFalse(self.dvm.running)
 
