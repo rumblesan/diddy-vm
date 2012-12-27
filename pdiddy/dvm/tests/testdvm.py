@@ -16,7 +16,7 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 1)
 
     def testNop(self):
-        self.dvm.nop()
+        self.dvm.nop(0)
         self.assertEqual(self.dvm.position, 2)
 
     def testPushValue(self):
