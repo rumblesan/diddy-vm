@@ -20,14 +20,14 @@ class DVM(VMBase):
         * Halt
     """
 
-    def __init__(self):
+    def __init__(self, debug=False, stack_display=False):
         """
         The constructor of the VMBase parent class is called to set
         everything up, then the instructions dictionary is setup
         in this constructor
         """
 
-        super(DVM, self).__init__()
+        super(DVM, self).__init__(debug, stack_display)
 
         i = self.instructions
 
@@ -44,11 +44,13 @@ class DVM(VMBase):
         i[10 << 28] = self.output
         i[11 << 28] = self.halt
 
-    def nop(self):
+    def nop(self, bits):
         """
         No Operation
         Just increments the position counter
         """
+        if self.debug:
+            print("Instruction:   NOP")
         self.next()
 
     # Data Movement Instructions
@@ -59,6 +61,8 @@ class DVM(VMBase):
         to push onto the stack, or the address
         pointer to the value
         """
+        if self.debug:
+            print("Instruction:   PUSH")
         data = bits & self.data_mask
         value = 0
         if bits & self.pointer_flag:
@@ -73,6 +77,8 @@ class DVM(VMBase):
         Pop the top value off the stack and load it into
         the memory location specified by the data value
         """
+        if self.debug:
+            print("Instruction:   POP")
         self.setMem(bits & self.data_mask, self.popStack())
         self.next()
 
@@ -83,6 +89,8 @@ class DVM(VMBase):
         Either to the data value, or to the top value
         of the stack, depending on the instruction flags
         """
+        if self.debug:
+            print("Instruction:   JUMP")
         value = 0
         if bits & self.data_flag:
             value = bits & self.data_mask
@@ -99,6 +107,8 @@ class DVM(VMBase):
         Set it to either the data value, or the next
         value on the stack, depending on the flags
         """
+        if self.debug:
+            print("Instruction:   BRANCH")
         if self.popStack():
             value = 0
             if bits & self.data_flag:
@@ -118,6 +128,9 @@ class DVM(VMBase):
         If they're equal then push a 1 onto the stack
         Otherwise push a 0
         """
+        if self.debug:
+            print("Instruction:   EQUAL")
+
         aVal = self.popStack()
         bVal = self.popStack()
 
@@ -134,6 +147,9 @@ class DVM(VMBase):
         Push a 1 onto the stack if the first value
         is greater than the second, otherwise write a 0
         """
+        if self.debug:
+            print("Instruction:   GREATER")
+
         aVal = self.popStack()
         bVal = self.popStack()
 
@@ -150,6 +166,9 @@ class DVM(VMBase):
         Push a 1 onto the stack if the first value
         is less than the second, otherwise write a 0
         """
+        if self.debug:
+            print("Instruction:   LESSER")
+
         aVal = self.popStack()
         bVal = self.popStack()
 
@@ -166,6 +185,9 @@ class DVM(VMBase):
         Add the top two values on the stack then push
         the result back onto the stack
         """
+        if self.debug:
+            print("Instruction:   ADD")
+
         aVal = self.popStack()
         bVal = self.popStack()
         self.pushStack(aVal + bVal)
@@ -176,6 +198,9 @@ class DVM(VMBase):
         Subtract the second value on the stack from
         the first then push the result back onto the stack
         """
+        if self.debug:
+            print("Instruction:   SUBTRACT")
+
         aVal = self.popStack()
         bVal = self.popStack()
         self.pushStack(aVal - bVal)
@@ -187,6 +212,9 @@ class DVM(VMBase):
         Either the top value on the stack, or the data value
         depending on the flags
         """
+        if self.debug:
+            print("Instruction:   OUTPUT")
+
         if bits & self.data_flag:
             value = bits & self.data_mask
         else:
@@ -200,6 +228,9 @@ class DVM(VMBase):
         """
         Halt the program and set the exit status to the value at address A
         """
+        if self.debug:
+            print("Instruction:   HALT")
+
         if bits & self.data_flag:
             value = bits & self.data_mask
         else:

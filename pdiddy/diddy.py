@@ -2,13 +2,23 @@
 
 from dvm import DVM
 
-from sys import argv
+from argparse import ArgumentParser
+
 from struct import unpack
 
-def main():
-    dvm = DVM()
+def parseArgs():
+    parser = ArgumentParser(description='DiddyVM')
+    parser.add_argument('program', help='the program to run')
+    parser.add_argument('-d', '--debug', help='enable debugging', action='store_true')
+    parser.add_argument('-s', '--stack', help='enable stack display', action='store_true')
 
-    program = argv[1]
+    return parser.parse_args()
+
+def main():
+
+    args = parseArgs()
+
+    dvm = DVM(args.debug, args.stack)
 
     programData = []
 
@@ -16,17 +26,15 @@ def main():
     # stored as 4 byte integers. This reads the file, 4 bytes at
     # a time, converts it back to an integer, and then appends
     # it to an array.
-    with open(program) as fp:
+    with open(args.program) as fp:
         for block in iter(lambda: fp.read(4), ""):
             value = unpack('@I', block)[0]
             programData.append(value)
-
 
     dvm.loadProgram(programData)
 
     while dvm.running == True:
         dvm.executeNextInstruction()
-
 
 if __name__ == '__main__':
     main()

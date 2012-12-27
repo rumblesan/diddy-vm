@@ -21,7 +21,7 @@ class VMBase(object):
     A VM Class with the instruction methods should inherit this
     """
 
-    def __init__(self):
+    def __init__(self, debug=False, stack_display=False):
         """
         Setup the ram, instruction dictionary and register dictionary
         """
@@ -40,6 +40,9 @@ class VMBase(object):
         self.pointer_flag = 1 << 26
         self.data_mask = ~(127 << 26)
 
+        self.debug = debug
+        self.stack_display = stack_display
+
     # General purpose functions
     def executeNextInstruction(self):
         """
@@ -48,10 +51,8 @@ class VMBase(object):
         """
         bits = self.ram[self.position]
         inst = bits & self.instruction_mask
-        print("instruction", inst, bits, self.position)
-        data = bits & self.data_mask
 
-        self.instructions[inst](data)
+        self.instructions[inst](bits)
 
 
     def setInstructionPointer(self, address):
@@ -116,14 +117,24 @@ class VMBase(object):
         Push a value onto the VM stack
         data should be an integer
         """
-        return self.stack.append(data)
+        value = self.stack.append(data)
+        if self.debug:
+            print("stack size:  %i" % len(self.stack))
+        if self.stack_display:
+            print(self.stack)
+        return value
 
     def popStack(self):
         """
         Pop a value off the VM stack
         data should be an integer
         """
-        return self.stack.pop()
+        value = self.stack.pop()
+        if self.debug:
+            print("stack size:  %i" % len(self.stack))
+        if self.stack_display:
+            print(self.stack)
+        return value
 
 if __name__ == '__main__':
     import unittest
