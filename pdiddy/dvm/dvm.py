@@ -136,7 +136,10 @@ class DVM(VMBase):
             print("Instruction:   EQUAL")
 
         aVal = self.popStack()
-        bVal = self.popStack()
+        if bits & self.data_flag:
+            bVal = bits & self.data_mask
+        else:
+            bVal = self.popStack()
 
         if aVal == bVal:
             self.pushStack(1)
@@ -155,7 +158,10 @@ class DVM(VMBase):
             print("Instruction:   GREATER")
 
         aVal = self.popStack()
-        bVal = self.popStack()
+        if bits & self.data_flag:
+            bVal = bits & self.data_mask
+        else:
+            bVal = self.popStack()
 
         if aVal > bVal:
             self.pushStack(1)
@@ -174,7 +180,10 @@ class DVM(VMBase):
             print("Instruction:   LESSER")
 
         aVal = self.popStack()
-        bVal = self.popStack()
+        if bits & self.data_flag:
+            bVal = bits & self.data_mask
+        else:
+            bVal = self.popStack()
 
         if aVal < bVal:
             self.pushStack(1)
@@ -193,7 +202,10 @@ class DVM(VMBase):
             print("Instruction:   ADD")
 
         aVal = self.popStack()
-        bVal = self.popStack()
+        if bits & self.data_flag:
+            bVal = bits & self.data_mask
+        else:
+            bVal = self.popStack()
         self.pushStack(aVal + bVal)
         self.next()
 
@@ -206,7 +218,10 @@ class DVM(VMBase):
             print("Instruction:   SUBTRACT")
 
         aVal = self.popStack()
-        bVal = self.popStack()
+        if bits & self.data_flag:
+            bVal = bits & self.data_mask
+        else:
+            bVal = self.popStack()
         self.pushStack(aVal - bVal)
         self.next()
 

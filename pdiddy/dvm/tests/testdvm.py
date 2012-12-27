@@ -88,7 +88,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(len(self.dvm.stack), 0)
         self.assertEqual(self.dvm.position, 2)
 
-    def testEqualTrue(self):
+    def testEqualDataTrue(self):
+        self.dvm.pushStack(4)
+        self.dvm.equal(self.dvm.data_flag | 4)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 1)
+
+    def testEqualStackTrue(self):
         self.dvm.pushStack(4)
         self.dvm.pushStack(4)
         self.dvm.equal(0)
@@ -96,7 +103,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 2)
         self.assertEqual(self.dvm.stack[0], 1)
 
-    def testEqualFalse(self):
+    def testEqualDataFalse(self):
+        self.dvm.pushStack(5)
+        self.dvm.equal(self.dvm.data_flag | 4)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 0)
+
+    def testEqualStackFalse(self):
         self.dvm.pushStack(5)
         self.dvm.pushStack(4)
         self.dvm.equal(0)
@@ -104,7 +118,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 2)
         self.assertEqual(self.dvm.stack[0], 0)
 
-    def testGreaterTrue(self):
+    def testGreaterDataTrue(self):
+        self.dvm.pushStack(5)
+        self.dvm.greater(self.dvm.data_flag | 4)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 1)
+
+    def testGreaterStackTrue(self):
         self.dvm.pushStack(5)
         self.dvm.pushStack(6)
         self.dvm.greater(0)
@@ -112,7 +133,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 2)
         self.assertEqual(self.dvm.stack[0], 1)
 
-    def testGreaterFalse(self):
+    def testGreaterDataFalse(self):
+        self.dvm.pushStack(7)
+        self.dvm.greater(self.dvm.data_flag | 8)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 0)
+
+    def testGreaterStackFalse(self):
         self.dvm.pushStack(7)
         self.dvm.pushStack(6)
         self.dvm.greater(0)
@@ -120,7 +148,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 2)
         self.assertEqual(self.dvm.stack[0], 0)
 
-    def testLesserTrue(self):
+    def testLesserDataTrue(self):
+        self.dvm.pushStack(7)
+        self.dvm.lesser(self.dvm.data_flag | 8)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 1)
+
+    def testLesserStackTrue(self):
         self.dvm.pushStack(7)
         self.dvm.pushStack(6)
         self.dvm.lesser(0)
@@ -128,7 +163,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 2)
         self.assertEqual(self.dvm.stack[0], 1)
 
-    def testLesserFalse(self):
+    def testLesserDataFalse(self):
+        self.dvm.pushStack(5)
+        self.dvm.lesser(self.dvm.data_flag | 4)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 0)
+
+    def testLesserStackFalse(self):
         self.dvm.pushStack(5)
         self.dvm.pushStack(6)
         self.dvm.lesser(0)
@@ -136,7 +178,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 2)
         self.assertEqual(self.dvm.stack[0], 0)
 
-    def testAdd(self):
+    def testAddData(self):
+        self.dvm.pushStack(5)
+        self.dvm.add(self.dvm.data_flag | 6)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 11)
+
+    def testAddStack(self):
         self.dvm.pushStack(5)
         self.dvm.pushStack(6)
         self.dvm.add(0)
@@ -144,7 +193,14 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 2)
         self.assertEqual(self.dvm.stack[0], 11)
 
-    def testSubtractFalse(self):
+    def testSubtractData(self):
+        self.dvm.pushStack(5)
+        self.dvm.subtract(self.dvm.data_flag | 4)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.position, 2)
+        self.assertEqual(self.dvm.stack[0], 1)
+
+    def testSubtractStack(self):
         self.dvm.pushStack(5)
         self.dvm.pushStack(6)
         self.dvm.subtract(0)
