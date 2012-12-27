@@ -35,11 +35,6 @@ class VMBase(object):
 
         self.stack = []
 
-        self.instruction_mask = 31 << 28
-        self.data_flag = 1 << 27
-        self.pointer_flag = 1 << 26
-        self.data_mask = ~(127 << 26)
-
         self.debug = debug
         self.stack_display = stack_display
 
