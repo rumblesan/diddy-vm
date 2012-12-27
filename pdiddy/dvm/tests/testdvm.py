@@ -19,15 +19,24 @@ class TestDVM(unittest.TestCase):
         self.dvm.nop(0)
         self.assertEqual(self.dvm.position, 2)
 
-    def testPushValue(self):
-        self.dvm.push(10)
+    def testPushData(self):
+        self.dvm.push(self.dvm.data_flag | 10)
         self.assertEqual(len(self.dvm.stack), 1)
         self.assertEqual(self.dvm.stack[0], 10)
         self.assertEqual(self.dvm.position, 2)
 
+    def testPushStack(self):
+        self.dvm.push(self.dvm.data_flag | 10)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.stack[0], 10)
+        self.dvm.push(0)
+        self.assertEqual(len(self.dvm.stack), 1)
+        self.assertEqual(self.dvm.stack[0], 10)
+        self.assertEqual(self.dvm.position, 3)
+
     def testPushPointer(self):
         self.dvm.setMem(4, 15)
-        self.dvm.push(self.dvm.pointer_flag | 4)
+        self.dvm.push(self.dvm.data_flag | self.dvm.pointer_flag | 4)
         self.assertEqual(len(self.dvm.stack), 1)
         self.assertEqual(self.dvm.stack[0], 15)
         self.assertEqual(self.dvm.position, 2)

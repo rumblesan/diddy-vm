@@ -67,12 +67,13 @@ class DVM(VMBase):
         """
         if self.debug:
             print("Instruction:   PUSH")
-        data = bits & self.data_mask
         value = 0
-        if bits & self.pointer_flag:
-            value = self.getMem(data)
+        if bits & self.data_flag:
+            value = bits & self.data_mask
         else:
-            value = data
+            value = self.popStack()
+        if bits & self.pointer_flag:
+            value = self.getMem(value)
         self.pushStack(value)
         self.next()
 
