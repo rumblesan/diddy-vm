@@ -44,7 +44,6 @@ class DVM(VMBase):
         i[10 << 28] = self.output
         i[11 << 28] = self.halt
 
-        self.instruction_mask = 31 << 28
         self.data_flag = 1 << 27
         self.pointer_flag = 1 << 26
         self.data_mask = ~(127 << 26)

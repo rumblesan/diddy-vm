@@ -38,6 +38,8 @@ class VMBase(object):
         self.debug = debug
         self.stack_display = stack_display
 
+        self.instruction_mask = 31 << 28
+
     # General purpose functions
     def executeNextInstruction(self):
         """
