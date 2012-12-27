@@ -1,29 +1,20 @@
-start:      COPY
-outpos:     data
-            output
-            EQUAL
-            output
-            zero
-            finished
-            BRANCH
-            finished
-            exit
-            print
-print:      OUTPUT
-            output
-            ADD
-            one
-            outpos
-            outpos
-            JUMP
-            start
-zero:       0
-one:        1
-finished:   0
+loop:     *#PUSH        address
+           *PUSH
+            POP         output
+          *#PUSH        output
+           #EQUAL       0
+           #BRANCH      exit
+          *#OUTPUT      output
+          *#PUSH        address
+           #ADD         1
+            POP         address
+           #JUMP        loop
+
 output:     0
-exit:       HALT
-            zero
-data:       72      #Hello World!\n
+address:    data
+exit:      #HALT        0
+
+data:       72          #Hello World!\n
             101
             108
             108
@@ -36,4 +27,4 @@ data:       72      #Hello World!\n
             100
             33
             10
-            0       #All strings are zero terminated
+            0           #All strings are zero terminated
