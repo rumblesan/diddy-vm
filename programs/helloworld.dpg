@@ -1,15 +1,14 @@
-start:     *PUSH        counter
-           *PUSH        length
+start:    *#PUSH        counter
+          *#PUSH        length
             EQUAL
            #BRANCH      finished
 
-           *PUSH        counter
-            PUSH        data
+          *#PUSH        counter
+           #PUSH        data
             ADD
            *OUTPUT
-           *PUSH        counter
-            PUSH        1
-            ADD
+          *#PUSH        counter
+           #ADD         1
             POP         counter
            #JUMP        start
 
