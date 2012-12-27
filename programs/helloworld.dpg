@@ -1,32 +1,22 @@
-start:      EQUAL
-            counter
-            length
-            finished
-            BRANCH
-            finished
-            exit
-            print
+start:     *PUSH        counter
+           *PUSH        length
+            EQUAL
+           #BRANCH      finished
+
+           *PUSH        counter
+            PUSH        data
+            ADD
+           *OUTPUT
+           *PUSH        counter
+            PUSH        1
+            ADD
+            POP         counter
+           #JUMP        start
+
 counter:    0
 length:     13      #Length of the output we're outputting
-finished:   0
-one:        1       #Increment Value
-print:      OUTPUT
-output:     data
-            NOP
-            ADD
-            one
-            output
-            output
-            ADD
-            one
-            counter
-            counter
-            JUMP
-            start
-exit:       HALT
-            28
-            0
-            NOP
+
+
 data:       72      #Hello World!\n
             101
             108
@@ -40,3 +30,4 @@ data:       72      #Hello World!\n
             100
             33
             10
+finished:  #HALT        1
