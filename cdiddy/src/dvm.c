@@ -23,23 +23,23 @@ DVM setup_diddy() {
     return dvm;
 }
 
-void nop(DVM dvm, uint32_t data) {
+void nop(DVM dvm, uint32_t bits) {
     next(dvm);
 }
 
-void push(DVM dvm, uint32_t data) {
+void push(DVM dvm, uint32_t bits) {
 }
 
-void pop(DVM dvm, uint32_t data) {
+void pop(DVM dvm, uint32_t bits) {
 }
 
-void jump(DVM dvm, uint32_t data) {
+void jump(DVM dvm, uint32_t bits) {
     next(dvm);
     int inAddr = getMem(dvm, -1);
     set_instruction_pointer(dvm, inAddr);
 }
 
-void branch(DVM dvm, uint32_t data) {
+void branch(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -57,7 +57,7 @@ void branch(DVM dvm, uint32_t data) {
     }
 }
 
-void equal(DVM dvm, uint32_t data) {
+void equal(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -77,7 +77,7 @@ void equal(DVM dvm, uint32_t data) {
     next(dvm);
 }
 
-void greater(DVM dvm, uint32_t data) {
+void greater(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -97,7 +97,7 @@ void greater(DVM dvm, uint32_t data) {
     next(dvm);
 }
 
-void lesser(DVM dvm, uint32_t data) {
+void lesser(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -117,7 +117,7 @@ void lesser(DVM dvm, uint32_t data) {
     next(dvm);
 }
 
-void add(DVM dvm, uint32_t data) {
+void add(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -135,7 +135,7 @@ void add(DVM dvm, uint32_t data) {
     next(dvm);
 }
 
-void subtract(DVM dvm, uint32_t data) {
+void subtract(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -153,7 +153,7 @@ void subtract(DVM dvm, uint32_t data) {
     next(dvm);
 }
 
-void output(DVM dvm, uint32_t data) {
+void output(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -162,7 +162,7 @@ void output(DVM dvm, uint32_t data) {
     next(dvm);
 }
 
-void halt(DVM dvm, uint32_t data) {
+void halt(DVM dvm, uint32_t bits) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);

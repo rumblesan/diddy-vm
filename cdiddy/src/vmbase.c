@@ -33,9 +33,9 @@ DVM setup_vmbase() {
 }
 
 void execute_next_instruction(DVM dvm) {
-    uint32_t data = getMem(dvm, -1);
-    uint32_t inst = (data & INSTRUCTION_MASK) >> 28;
-    (*dvm->instructions[inst]) (dvm, data);
+    uint32_t bits = getMem(dvm, -1);
+    uint32_t inst = (bits & INSTRUCTION_MASK) >> 28;
+    (*dvm->instructions[inst]) (dvm, bits);
 }
 
 void set_instruction_pointer(DVM dvm, int address) {
