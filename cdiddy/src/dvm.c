@@ -3,6 +3,10 @@
 #include "dvm.h"
 #include "vmbase.h"
 
+#define DATA_FLAG 0x08000000
+#define POINTER_FLAG 0x04000000
+#define DATA_MASK  0x03FFFFFF
+
 DVM setup_diddy() {
 
     DVM dvm = setup_vmbase();
@@ -28,9 +32,22 @@ void nop(DVM dvm, uint32_t bits) {
 }
 
 void push(DVM dvm, uint32_t bits) {
+    uint32_t value = 0;
+    if (bits & DATA_FLAG) {
+        value = bits & DATA_MASK;
+    } else {
+        value = pop_stack(dvm);
+    }
+    if (bits & POINTER_FLAG) {
+        value = getMem(dvm, value);
+    }
+    push_stack(dvm, value);
+    next(dvm);
 }
 
 void pop(DVM dvm, uint32_t bits) {
+    setMem(dvm, bits & DATA_MASK, pop_stack(dvm));
+    next(dvm);
 }
 
 void jump(DVM dvm, uint32_t bits) {
