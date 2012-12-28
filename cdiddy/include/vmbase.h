@@ -15,7 +15,7 @@ typedef struct diddyvm {
     uint32_t *stack;
 
     // Create an array that will store function pointers
-    void (*instructions[12]) (DVM dvm);
+    void (*instructions[12]) (DVM dvm, uint32_t data);
 
     int running;
 

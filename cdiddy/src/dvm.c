@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 #include "dvm.h"
 #include "vmbase.h"
 
@@ -21,23 +23,23 @@ DVM setup_diddy() {
     return dvm;
 }
 
-void nop(DVM dvm) {
+void nop(DVM dvm, uint32_t data) {
     next(dvm);
 }
 
-void push(DVM dvm) {
+void push(DVM dvm, uint32_t data) {
 }
 
-void pop(DVM dvm) {
+void pop(DVM dvm, uint32_t data) {
 }
 
-void jump(DVM dvm) {
+void jump(DVM dvm, uint32_t data) {
     next(dvm);
     int inAddr = getMem(dvm, -1);
     set_instruction_pointer(dvm, inAddr);
 }
 
-void branch(DVM dvm) {
+void branch(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -55,7 +57,7 @@ void branch(DVM dvm) {
     }
 }
 
-void equal(DVM dvm) {
+void equal(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -75,7 +77,7 @@ void equal(DVM dvm) {
     next(dvm);
 }
 
-void greater(DVM dvm) {
+void greater(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -95,7 +97,7 @@ void greater(DVM dvm) {
     next(dvm);
 }
 
-void lesser(DVM dvm) {
+void lesser(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -115,7 +117,7 @@ void lesser(DVM dvm) {
     next(dvm);
 }
 
-void add(DVM dvm) {
+void add(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -133,7 +135,7 @@ void add(DVM dvm) {
     next(dvm);
 }
 
-void subtract(DVM dvm) {
+void subtract(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -151,7 +153,7 @@ void subtract(DVM dvm) {
     next(dvm);
 }
 
-void output(DVM dvm) {
+void output(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
@@ -159,7 +161,7 @@ void output(DVM dvm) {
     system_out(dvm, aVal);
 }
 
-void halt(DVM dvm) {
+void halt(DVM dvm, uint32_t data) {
     next(dvm);
     int aAddr = getMem(dvm, -1);
     int aVal = getMem(dvm, aAddr);
