@@ -113,6 +113,7 @@ void dump_program(DVM dvm) {
 
 void cleanup_dvm(DVM dvm) {
     free(dvm->ram);
+    free(dvm->stack);
     free(dvm);
 }
 
