@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdint.h>
 
 #include "vmbase.h"
+
+#define INSTRUCTION_MASK (31 << 28)
 
 DVM setup_vmbase() {
 
@@ -10,11 +13,11 @@ DVM setup_vmbase() {
 
     dvm->ram_size       = 4096;
     dvm->position       = 1;
-    dvm->ram            = (int*) malloc(sizeof(int*) * dvm->ram_size);
+    dvm->ram            = (uint32_t*) malloc(sizeof(uint32_t*) * dvm->ram_size);
 
     dvm->stack_size     = 1024;
     dvm->stack_position = -1;
-    dvm->stack          = (int*) malloc(sizeof(int*) * dvm->stack_size);
+    dvm->stack          = (uint32_t*) malloc(sizeof(uint32_t*) * dvm->stack_size);
 
     int i;
     for (i=0; i < 4096; i++) {
@@ -42,7 +45,7 @@ void next(DVM dvm) {
     dvm->position++;
 }
 
-void push_stack(DVM dvm, int data) {
+void push_stack(DVM dvm, uint32_t data) {
     dvm->stack_position++;
     if (dvm->stack_position == dvm->stack_size) {
         dvm->running = 0;
@@ -52,8 +55,8 @@ void push_stack(DVM dvm, int data) {
     }
 }
 
-int pop_stack(DVM dvm) {
-    int value = 0;
+uint32_t pop_stack(DVM dvm) {
+    uint32_t value = 0;
     if (dvm->stack_position < 0) {
         dvm->running = 0;
         dvm->status = 1;
@@ -64,9 +67,9 @@ int pop_stack(DVM dvm) {
     return value;
 }
 
-int getMem(DVM dvm, int addr) {
+uint32_t getMem(DVM dvm, int addr) {
 
-    int output;
+    uint32_t output;
 
     if (addr == -1) {
         output = dvm->ram[dvm->position];
@@ -76,7 +79,7 @@ int getMem(DVM dvm, int addr) {
     return output;
 }
 
-void setMem(DVM dvm, int addr, int value) {
+void setMem(DVM dvm, int addr, uint32_t value) {
     dvm->ram[addr] = value;
 }
 
@@ -90,7 +93,7 @@ void system_out(DVM dvm, int c) {
     next(dvm);
 }
 
-void load_program(DVM dvm, int *program_data, int length) {
+void load_program(DVM dvm, uint32_t *program_data, int length) {
 
     int i;
     for (i = 0; i < length; i++) {

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdint.h>
 
 #include "diddy.h"
 #include "dvm.h"
@@ -44,7 +45,7 @@ Args parse_args(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
 
 	FILE *file;
-	int *buffer;
+	uint32_t *buffer;
 	unsigned long fileLen;
 
     Args args = parse_args(argc, argv);
@@ -70,7 +71,7 @@ int main(int argc, char *argv[]) {
     fprintf(stdout, "File is %lu ints long\n", fileLen);
 
 	//Allocate memory
-	buffer = (int*) malloc(sizeof(int) * fileLen);
+	buffer = (uint32_t*) malloc(sizeof(uint32_t) * fileLen);
 	if (!buffer)
 	{
 		fprintf(stderr, "Memory error!");
@@ -81,7 +82,7 @@ int main(int argc, char *argv[]) {
 	//Read file contents as ints into buffer
     int i;
     for (i = 0; i < fileLen; i++) {
-        fread(&buffer[i], sizeof(int), 1, file);
+        fread(&buffer[i], sizeof(uint32_t), 1, file);
     }
 
     DVM dvm = setup_diddy();

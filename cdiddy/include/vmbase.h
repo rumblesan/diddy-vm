@@ -1,19 +1,21 @@
 #ifndef VMBASE_H
 #define VMBASE_H
 
+#include <stdint.h>
+
 typedef struct diddyvm *DVM;
 typedef struct diddyvm {
 
     int ram_size;
     int position;
-    int *ram;
+    uint32_t *ram;
 
     int stack_size;
     int stack_position;
-    int *stack;
+    uint32_t *stack;
 
     // Create an array that will store function pointers
-    void (*instructions[11]) (DVM dvm);
+    void (*instructions[12]) (DVM dvm);
 
     int running;
 
@@ -31,19 +33,19 @@ void set_instruction_pointer(DVM dvm, int address);
 
 void next(DVM dvm);
 
-void push_stack(DVM dvm, int data);
+void push_stack(DVM dvm, uint32_t data);
 
-int pop_stack(DVM dvm);
+uint32_t pop_stack(DVM dvm);
 
-int getMem(DVM dvm, int addr);
+uint32_t getMem(DVM dvm, int addr);
 
-void setMem(DVM dvm, int addr, int value);
+void setMem(DVM dvm, int addr, uint32_t value);
 
 void system_exit(DVM dvm, int value);
 
 void system_out(DVM dvm, int c);
 
-void load_program(DVM dvm, int *program_data, int length);
+void load_program(DVM dvm, uint32_t *program_data, int length);
 
 void dump_program(DVM dvm);
 
