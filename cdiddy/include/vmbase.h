@@ -4,12 +4,16 @@
 typedef struct diddyvm *DVM;
 typedef struct diddyvm {
 
+    int ram_size;
+    int position;
     int *ram;
+
+    int stack_size;
+    int stack_position;
+    int *stack;
 
     // Create an array that will store function pointers
     void (*instructions[11]) (DVM dvm);
-
-    int position;
 
     int running;
 
@@ -26,6 +30,10 @@ void execute_next_instruction(DVM dvm);
 void set_instruction_pointer(DVM dvm, int address);
 
 void next(DVM dvm);
+
+void push_stack(DVM dvm, int data);
+
+int pop_stack(DVM dvm);
 
 int getMem(DVM dvm, int addr);
 

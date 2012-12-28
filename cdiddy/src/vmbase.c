@@ -6,18 +6,23 @@
 
 DVM setup_vmbase() {
 
-    DVM dvm           = (DVM) malloc(sizeof(DVM_Data));
+    DVM dvm             = (DVM) malloc(sizeof(DVM_Data));
 
-    dvm->ram          = (int*) malloc(sizeof(int*) * 4096);
+    dvm->ram_size       = 4096;
+    dvm->position       = 1;
+    dvm->ram            = (int*) malloc(sizeof(int*) * dvm->ram_size);
+
+    dvm->stack_size     = 1024;
+    dvm->stack_position = -1;
+    dvm->stack          = (int*) malloc(sizeof(int*) * dvm->stack_size);
 
     int i;
     for (i=0; i < 4096; i++) {
         dvm->ram[i] = 0;
     }
 
-    dvm->position     = 1;
-    dvm->running      = 1;
-    dvm->status       = 0;
+    dvm->running        = 1;
+    dvm->status         = 0;
 
     dvm->program_length = 0;
 
@@ -35,6 +40,28 @@ void set_instruction_pointer(DVM dvm, int address) {
 
 void next(DVM dvm) {
     dvm->position++;
+}
+
+void push_stack(DVM dvm, int data) {
+    dvm->stack_position++;
+    if (dvm->stack_position == dvm->stack_size) {
+        dvm->running = 0;
+        dvm->status = 1;
+    } else {
+        dvm->stack[dvm->stack_position] = data;
+    }
+}
+
+int pop_stack(DVM dvm) {
+    int value = 0;
+    if (dvm->stack_position < 0) {
+        dvm->running = 0;
+        dvm->status = 1;
+    } else {
+        value = dvm->stack[dvm->stack_position];
+    }
+    dvm->stack_position--;
+    return value;
 }
 
 int getMem(DVM dvm, int addr) {
