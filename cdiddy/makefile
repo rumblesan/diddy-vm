@@ -1,20 +1,33 @@
-CC         = clang
-CFLAGS     = -c -Wall
-VPATH      = src
-OBJDIR     = temp
-SOURCES    = diddy.c dvm.c vmbase.c
-OBJECTS    = $(addprefix $(OBJDIR)/, $(SOURCES:.c=.o))
-HEADERS    = include/
-EXECUTABLE = cdiddy
+CC                = clang
+CFLAGS            = -c -Wall
+VPATH             = src
+TEMP_DIR          = temp
+HEADERS           = include/
+
+CORE_SOURCES      = dvm.c vmbase.c
+TEST_SOURCES      = unit_tests.c $(CORE_SOURCES)
+DVM_SOURCES       = diddy.c $(CORE_SOURCES)
+
+DVM_OBJECTS       = $(addprefix $(TEMP_DIR)/, $(DVM_SOURCES:.c=.o))
+TEST_OBJECTS      = $(addprefix $(TEMP_DIR)/, $(TEST_SOURCES:.c=.o))
+
+EXECUTABLE        = cdiddy
+TEST_EXECUTABLE   = $(addprefix $(TEMP_DIR)/, test_cdiddy)
 
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $@
+tests: $(TEST_EXECUTABLE)
+	./$(TEST_EXECUTABLE)
 
-$(OBJDIR)/%.o: %.c
+$(TEMP_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -I$(HEADERS) $< -o $@
 
+$(EXECUTABLE): $(DVM_OBJECTS)
+	$(CC) $(DVM_OBJECTS) -o $@
+
+$(TEST_EXECUTABLE): $(TEST_OBJECTS)
+	$(CC) $(TEST_OBJECTS) -o $@
+
 clean:
-	rm -rf $(OBJDIR)/*.o $(EXECUTABLE)
+	rm -rf $(TEMP_DIR)/*.o $(EXECUTABLE)
 
