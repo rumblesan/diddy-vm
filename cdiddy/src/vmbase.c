@@ -5,7 +5,7 @@
 
 #include "vmbase.h"
 
-#define INSTRUCTION_MASK (31 << 28)
+#define INSTRUCTION_MASK 0x1F000000
 
 DVM setup_vmbase() {
 
@@ -33,8 +33,9 @@ DVM setup_vmbase() {
 }
 
 void execute_next_instruction(DVM dvm) {
-    int i = getMem(dvm, -1);
-    (*dvm->instructions[i]) (dvm);
+    uint32_t data = getMem(dvm, -1);
+    uint32_t inst = (data & INSTRUCTION_MASK) >> 28;
+    (*dvm->instructions[inst]) (dvm);
 }
 
 void set_instruction_pointer(DVM dvm, int address) {
