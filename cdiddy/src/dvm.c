@@ -51,139 +51,153 @@ void pop(DVM dvm, uint32_t bits) {
 }
 
 void jump(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int inAddr = getMem(dvm, -1);
-    set_instruction_pointer(dvm, inAddr);
+    uint32_t value = 0;
+    if (bits & DATA_FLAG) {
+        value = bits & DATA_MASK;
+    } else {
+        value = pop_stack(dvm);
+    }
+    if (bits & POINTER_FLAG) {
+        value = getMem(dvm, value);
+    }
+    set_instruction_pointer(dvm, value);
 }
 
 void branch(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
-
-    next(dvm);
-    int bAddr = getMem(dvm, -1);
-
-    next(dvm);
-    int cAddr = getMem(dvm, -1);
-
-    if (aVal == 0) {
-        set_instruction_pointer(dvm, cAddr);
+    if (pop_stack(dvm) != 0) {
+        uint32_t value = 0;
+        if (bits & DATA_FLAG) {
+            value = bits & DATA_MASK;
+        } else {
+            value = pop_stack(dvm);
+        }
+        if (bits & POINTER_FLAG) {
+            value = getMem(dvm, value);
+        }
+        set_instruction_pointer(dvm, value);
     } else {
-        set_instruction_pointer(dvm, bAddr);
+        next(dvm);
     }
 }
 
 void equal(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
 
-    next(dvm);
-    int bAddr = getMem(dvm, -1);
-    int bVal = getMem(dvm, bAddr);
+    uint32_t aVal = pop_stack(dvm);
 
-    next(dvm);
-    int cAddr = getMem(dvm, -1);
+    uint32_t bVal = 0;
+    if (bits & DATA_FLAG) {
+        bVal = bits & DATA_MASK;
+    } else {
+        bVal = pop_stack(dvm);
+    }
 
     if (aVal == bVal) {
-        setMem(dvm, cAddr, 1);
+        push_stack(dvm, 1);
     } else {
-        setMem(dvm, cAddr, 0);
+        push_stack(dvm, 0);
     }
+
     next(dvm);
 }
 
 void greater(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
 
-    next(dvm);
-    int bAddr = getMem(dvm, -1);
-    int bVal = getMem(dvm, bAddr);
+    uint32_t aVal = pop_stack(dvm);
 
-    next(dvm);
-    int cAddr = getMem(dvm, -1);
+    uint32_t bVal = 0;
+    if (bits & DATA_FLAG) {
+        bVal = bits & DATA_MASK;
+    } else {
+        bVal = pop_stack(dvm);
+    }
 
     if (aVal > bVal) {
-        setMem(dvm, cAddr, 1);
+        push_stack(dvm, 1);
     } else {
-        setMem(dvm, cAddr, 0);
+        push_stack(dvm, 0);
     }
+
     next(dvm);
 }
 
 void lesser(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
 
-    next(dvm);
-    int bAddr = getMem(dvm, -1);
-    int bVal = getMem(dvm, bAddr);
+    uint32_t aVal = pop_stack(dvm);
 
-    next(dvm);
-    int cAddr = getMem(dvm, -1);
+    uint32_t bVal = 0;
+    if (bits & DATA_FLAG) {
+        bVal = bits & DATA_MASK;
+    } else {
+        bVal = pop_stack(dvm);
+    }
 
     if (aVal < bVal) {
-        setMem(dvm, cAddr, 1);
+        push_stack(dvm, 1);
     } else {
-        setMem(dvm, cAddr, 0);
+        push_stack(dvm, 0);
     }
+
     next(dvm);
 }
 
 void add(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
 
-    next(dvm);
-    int bAddr = getMem(dvm, -1);
-    int bVal = getMem(dvm, bAddr);
+    uint32_t aVal = pop_stack(dvm);
 
-    next(dvm);
-    int cAddr = getMem(dvm, -1);
+    uint32_t bVal = 0;
+    if (bits & DATA_FLAG) {
+        bVal = bits & DATA_MASK;
+    } else {
+        bVal = pop_stack(dvm);
+    }
 
-    int value = aVal + bVal;
+    push_stack(dvm, aVal + bVal);
 
-    setMem(dvm, cAddr, value);
     next(dvm);
 }
 
 void subtract(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
+
+    uint32_t aVal = pop_stack(dvm);
+
+    uint32_t bVal = 0;
+    if (bits & DATA_FLAG) {
+        bVal = bits & DATA_MASK;
+    } else {
+        bVal = pop_stack(dvm);
+    }
+
+    push_stack(dvm, aVal - bVal);
 
     next(dvm);
-    int bAddr = getMem(dvm, -1);
-    int bVal = getMem(dvm, bAddr);
 
-    next(dvm);
-    int cAddr = getMem(dvm, -1);
-
-    int value = aVal - bVal;
-
-    setMem(dvm, cAddr, value);
-    next(dvm);
 }
 
 void output(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
+    uint32_t value = 0;
+    if (bits & DATA_FLAG) {
+        value = bits & DATA_MASK;
+    } else {
+        value = pop_stack(dvm);
+    }
+    if (bits & POINTER_FLAG) {
+        value = getMem(dvm, value);
+    }
+    system_out(dvm, value);
 
-    system_out(dvm, aVal);
     next(dvm);
 }
 
 void halt(DVM dvm, uint32_t bits) {
-    next(dvm);
-    int aAddr = getMem(dvm, -1);
-    int aVal = getMem(dvm, aAddr);
-
-    system_exit(dvm, aVal);
+    uint32_t value = 0;
+    if (bits & DATA_FLAG) {
+        value = bits & DATA_MASK;
+    } else {
+        value = pop_stack(dvm);
+    }
+    if (bits & POINTER_FLAG) {
+        value = getMem(dvm, value);
+    }
+    system_exit(dvm, value);
 }
 
