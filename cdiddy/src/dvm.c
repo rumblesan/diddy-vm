@@ -6,16 +6,17 @@ DVM setup_diddy() {
     DVM dvm = setup_vmbase();
 
     dvm->instructions[0] = nop;
-    dvm->instructions[1] = copy;
-    dvm->instructions[2] = jump;
-    dvm->instructions[3] = branch;
-    dvm->instructions[4] = equal;
-    dvm->instructions[5] = greater;
-    dvm->instructions[6] = lesser;
-    dvm->instructions[7] = add;
-    dvm->instructions[8] = subtract;
-    dvm->instructions[9] = output;
-    dvm->instructions[10] = halt;
+    dvm->instructions[1] = push;
+    dvm->instructions[2] = pop;
+    dvm->instructions[3] = jump;
+    dvm->instructions[4] = branch;
+    dvm->instructions[5] = equal;
+    dvm->instructions[6] = greater;
+    dvm->instructions[7] = lesser;
+    dvm->instructions[8] = add;
+    dvm->instructions[9] = subtract;
+    dvm->instructions[10] = output;
+    dvm->instructions[11] = halt;
 
     return dvm;
 }
@@ -24,15 +25,10 @@ void nop(DVM dvm) {
     next(dvm);
 }
 
+void push(DVM dvm) {
+}
 
-void copy(DVM dvm) {
-    next(dvm);
-    int inAddr = getMem(dvm, -1);
-    int inVal = getMem(dvm, inAddr);
-    next(dvm);
-    int outAddr = getMem(dvm, -1);
-    setMem(dvm, outAddr, inVal);
-    next(dvm);
+void pop(DVM dvm) {
 }
 
 void jump(DVM dvm) {

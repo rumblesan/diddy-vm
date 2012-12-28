@@ -7,7 +7,9 @@ DVM setup_diddy();
 
 void nop(DVM dvm);
 
-void copy(DVM dvm);
+void push(DVM dvm);
+
+void pop(DVM dvm);
 
 void jump(DVM dvm);
 
