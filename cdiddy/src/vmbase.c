@@ -5,7 +5,7 @@
 
 #include "vmbase.h"
 
-#define INSTRUCTION_MASK 0x1F000000
+#define INSTRUCTION_MASK 0xF0000000
 
 DVM setup_vmbase() {
 
