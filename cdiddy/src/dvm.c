@@ -159,6 +159,7 @@ void output(DVM dvm, uint32_t data) {
     int aVal = getMem(dvm, aAddr);
 
     system_out(dvm, aVal);
+    next(dvm);
 }
 
 void halt(DVM dvm, uint32_t data) {
