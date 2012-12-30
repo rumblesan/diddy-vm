@@ -19,15 +19,19 @@ static char * test_creation() {
     return 0;
 }
 
+static void stop_func(DVM dvm, uint32_t bits) {
+    dvm->running = 0;
+}
+
 static char * test_execute_next_instruction() {
     DVM dvm = setup_vmbase();
 
-    dvm->instructions[1] = nop;
+    dvm->instructions[1] = stop_func;
     dvm->position = 100;
     dvm->ram[100] = 1 << 28;
     execute_next_instruction(dvm);
 
-    mu_assert("Error: DVM should be running", dvm->running == 1);
+    mu_assert("Error: DVM should be running", dvm->running == 0);
 
     cleanup_dvm(dvm);
     return 0;
