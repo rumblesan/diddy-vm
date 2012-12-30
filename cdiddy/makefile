@@ -5,7 +5,7 @@ TEMP_DIR          = temp
 HEADERS           = include/
 
 CORE_SOURCES      = dvm.c vmbase.c
-TEST_SOURCES      = all_tests.c test_vmbase.c $(CORE_SOURCES)
+TEST_SOURCES      = all_tests.c test_vmbase.c test_dvm.c $(CORE_SOURCES)
 DVM_SOURCES       = diddy.c $(CORE_SOURCES)
 
 DVM_OBJECTS       = $(addprefix $(TEMP_DIR)/, $(DVM_SOURCES:.c=.o))
