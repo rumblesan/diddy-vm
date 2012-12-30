@@ -148,7 +148,7 @@ static char * test_exit() {
     return 0;
 }
 
-char * all_tests() {
+char * test_vmbase() {
     mu_run_test(test_creation);
     mu_run_test(test_execute_next_instruction);
     mu_run_test(test_set_instruction_pointer);

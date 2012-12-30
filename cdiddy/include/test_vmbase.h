@@ -1,6 +1,6 @@
-#ifndef UNIT_TESTS_H
-#define UNIT_TESTS_H
+#ifndef TEST_VMBASE_H
+#define TEST_VMBASE_H
 
-char * all_tests();
+char * test_vmbase();
 
 #endif
