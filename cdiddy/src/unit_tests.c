@@ -29,9 +29,10 @@ static char * test_execute_next_instruction() {
     dvm->instructions[1] = stop_func;
     dvm->position = 100;
     dvm->ram[100] = 1 << 28;
+    mu_assert("Error: DVM should be running", dvm->running == 1);
     execute_next_instruction(dvm);
 
-    mu_assert("Error: DVM should be running", dvm->running == 0);
+    mu_assert("Error: DVM should not be running", dvm->running == 0);
 
     cleanup_dvm(dvm);
     return 0;
