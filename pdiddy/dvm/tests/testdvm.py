@@ -239,12 +239,20 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.status, 5)
         self.assertFalse(self.dvm.running)
 
-    def testHaltPointer(self):
+    def testHaltDataPointer(self):
         self.dvm.pushStack(10)
         self.assertEqual(self.dvm.status, 0)
         self.assertTrue(self.dvm.running)
         self.dvm.setMem(10, 5)
         self.dvm.halt(self.dvm.pointer_flag | 10)
+        self.assertEqual(self.dvm.status, 5)
+        self.assertFalse(self.dvm.running)
+
+    def testHaltStackPointer(self):
+        self.assertEqual(self.dvm.status, 0)
+        self.assertTrue(self.dvm.running)
+        self.dvm.setMem(10, 5)
+        self.dvm.halt(self.dvm.pointer_flag | self.dvm.data_flag | 10)
         self.assertEqual(self.dvm.status, 5)
         self.assertFalse(self.dvm.running)
 
