@@ -102,8 +102,10 @@ static char * test_set_mem() {
     DVM dvm = setup_vmbase();
 
     setMem(dvm, 10, 100);
+    setMem(dvm, 20, 200);
 
     mu_assert("Error: DVM memory not set correctly", dvm->ram[10] == 100);
+    mu_assert("Error: DVM memory not set correctly", dvm->ram[20] == 200);
 
     cleanup_dvm(dvm);
     return 0;
@@ -113,13 +115,28 @@ static char * test_get_mem() {
     DVM dvm = setup_vmbase();
 
     dvm->ram[10] = 100;
-
-    mu_assert("Error: getMem not returning correct value", getMem(dvm, 10) == 100);
-
-    dvm->position = 20;
     dvm->ram[20] = 200;
 
+    mu_assert("Error: getMem not returning correct value", getMem(dvm, 10) == 100);
+    mu_assert("Error: getMem not returning correct value", getMem(dvm, 20) == 200);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
+static char * test_get_pointer_mem() {
+    DVM dvm = setup_vmbase();
+
+    dvm->ram[200] = 200;
+    dvm->ram[201] = 201;
+    dvm->ram[202] = 202;
+
+    set_instruction_pointer(dvm, 200);
     mu_assert("Error: getMem not returning correct value", getMem(dvm, -1) == 200);
+    next(dvm);
+    mu_assert("Error: getMem not returning correct value", getMem(dvm, -1) == 201);
+    next(dvm);
+    mu_assert("Error: getMem not returning correct value", getMem(dvm, -1) == 202);
 
     cleanup_dvm(dvm);
     return 0;
@@ -144,6 +161,7 @@ static char * all_tests() {
     mu_run_test(test_next_instruction_pointer);
     mu_run_test(test_stack);
     mu_run_test(test_get_mem);
+    mu_run_test(test_get_pointer_mem);
     mu_run_test(test_set_mem);
     mu_run_test(test_exit);
     mu_run_test(test_load_program);
