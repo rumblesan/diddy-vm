@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdint.h>
 
 #include "min_unit.h"
 #include "test_vmbase.h"
