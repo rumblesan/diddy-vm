@@ -82,7 +82,7 @@ static char * test_stack() {
     push_stack(dvm, 0);
     push_stack(dvm, 1);
     push_stack(dvm, 2);
-    mu_assert("Error: Stack poition should be 3", dvm->stack_position == 2);
+    mu_assert("Error: Stack poition should be 2", dvm->stack_position == 2);
 
     mu_assert("Error: Popped value should be 2", pop_stack(dvm) == 2);
     mu_assert("Error: Popped value should be 1", pop_stack(dvm) == 1);
