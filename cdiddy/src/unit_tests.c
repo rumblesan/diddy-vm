@@ -64,6 +64,23 @@ static char * test_next_instruction_pointer() {
     return 0;
 }
 
+static char * test_load_program() {
+    DVM dvm = setup_vmbase();
+
+    uint32_t program_data[4] = {1, 2, 3, 4};
+
+    load_program(dvm, program_data, 4);
+
+    mu_assert("Error: memory value should be 1", dvm->ram[1] == 1);
+    mu_assert("Error: memory value should be 2", dvm->ram[2] == 2);
+    mu_assert("Error: memory value should be 3", dvm->ram[3] == 3);
+    mu_assert("Error: memory value should be 4", dvm->ram[4] == 4);
+    mu_assert("Error: instruction pointer should be 1", dvm->position == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
 static char * test_stack() {
     DVM dvm = setup_vmbase();
 
@@ -114,22 +131,6 @@ static char * test_exit() {
     system_exit(dvm, 5);
     mu_assert("Error: DVM running should be 0", dvm->running == 0);
     mu_assert("Error: DVM status should be 5", dvm->status == 5);
-
-    cleanup_dvm(dvm);
-    return 0;
-}
-
-static char * test_load_program() {
-    DVM dvm = setup_vmbase();
-
-    uint32_t program_data[4] = {1, 2, 3, 4};
-
-    load_program(dvm, program_data, 4);
-
-    mu_assert("Error: memory value should be 1", dvm->ram[1] == 1);
-    mu_assert("Error: memory value should be 2", dvm->ram[2] == 2);
-    mu_assert("Error: memory value should be 3", dvm->ram[3] == 3);
-    mu_assert("Error: memory value should be 4", dvm->ram[4] == 4);
 
     cleanup_dvm(dvm);
     return 0;
