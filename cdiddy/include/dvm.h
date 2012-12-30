@@ -5,6 +5,10 @@
 
 #include "vmbase.h"
 
+#define DATA_FLAG 0x08000000
+#define POINTER_FLAG 0x04000000
+#define DATA_MASK  0x03FFFFFF
+
 DVM setup_diddy();
 
 void nop(DVM dvm, uint32_t bits);
