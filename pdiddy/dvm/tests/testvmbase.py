@@ -13,6 +13,7 @@ class TestVMBase(unittest.TestCase):
 
     def test_creation(self):
         self.assertIsInstance(self.vmbase, VMBase)
+        self.assertTrue(self.vmbase.running)
 
     def testExecuteNextInstruction(self):
         self.vmbase.instructions[1 << 28] = self.vmStop
@@ -35,6 +36,22 @@ class TestVMBase(unittest.TestCase):
         self.assertEqual(self.vmbase.position, 101)
         self.vmbase.next()
         self.assertEqual(self.vmbase.position, 102)
+
+    def testLoadProgram(self):
+        programData = [1, 2, 3, 4]
+        self.vmbase.loadProgram(programData)
+        self.assertEqual(self.vmbase.ram[1], 1)
+        self.assertEqual(self.vmbase.ram[2], 2)
+        self.assertEqual(self.vmbase.ram[3], 3)
+        self.assertEqual(self.vmbase.ram[4], 4)
+
+    def testStack(self):
+        self.vmbase.pushStack(1)
+        self.vmbase.pushStack(2)
+        self.vmbase.pushStack(3)
+        self.assertEqual(self.vmbase.popStack(), 3)
+        self.assertEqual(self.vmbase.popStack(), 2)
+        self.assertEqual(self.vmbase.popStack(), 1)
 
     def testSetMem(self):
         self.vmbase.setMem(100, 111)
@@ -83,20 +100,4 @@ class TestVMBase(unittest.TestCase):
         self.vmbase.systemExit(1)
         self.assertEqual(self.vmbase.status, 1)
         self.assertFalse(self.vmbase.running)
-
-    def testLoadProgram(self):
-        programData = [1, 2, 3, 4]
-        self.vmbase.loadProgram(programData)
-        self.assertEqual(self.vmbase.ram[1], 1)
-        self.assertEqual(self.vmbase.ram[2], 2)
-        self.assertEqual(self.vmbase.ram[3], 3)
-        self.assertEqual(self.vmbase.ram[4], 4)
-
-    def testStack(self):
-        self.vmbase.pushStack(1)
-        self.vmbase.pushStack(2)
-        self.vmbase.pushStack(3)
-        self.assertEqual(self.vmbase.popStack(), 3)
-        self.assertEqual(self.vmbase.popStack(), 2)
-        self.assertEqual(self.vmbase.popStack(), 1)
 

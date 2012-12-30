@@ -64,6 +64,30 @@ class VMBase(object):
         """
         self.position += 1
 
+    def pushStack(self, data):
+        """
+        Push a value onto the VM stack
+        data should be an integer
+        """
+        value = self.stack.append(data)
+        if self.debug:
+            print("stack size:  %i" % len(self.stack))
+        if self.stack_display:
+            print(self.stack)
+        return value
+
+    def popStack(self):
+        """
+        Pop a value off the VM stack
+        data should be an integer
+        """
+        value = self.stack.pop()
+        if self.debug:
+            print("stack size:  %i" % len(self.stack))
+        if self.stack_display:
+            print(self.stack)
+        return value
+
     def getMem(self, addr=-1):
         """
         Retrieve a value from a memory address
@@ -108,30 +132,6 @@ class VMBase(object):
             self.setMem(self.position, value)
             self.next()
         self.setInstructionPointer(1)
-
-    def pushStack(self, data):
-        """
-        Push a value onto the VM stack
-        data should be an integer
-        """
-        value = self.stack.append(data)
-        if self.debug:
-            print("stack size:  %i" % len(self.stack))
-        if self.stack_display:
-            print(self.stack)
-        return value
-
-    def popStack(self):
-        """
-        Pop a value off the VM stack
-        data should be an integer
-        """
-        value = self.stack.pop()
-        if self.debug:
-            print("stack size:  %i" % len(self.stack))
-        if self.stack_display:
-            print(self.stack)
-        return value
 
 if __name__ == '__main__':
     import unittest
