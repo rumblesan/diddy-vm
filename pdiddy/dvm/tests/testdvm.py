@@ -84,6 +84,13 @@ class TestDVM(unittest.TestCase):
         self.assertEqual(self.dvm.position, 10)
 
     def testBranchTrueDataPointer(self):
+        self.dvm.pushStack(1)
+        self.dvm.setMem(15, 10)
+        self.dvm.branch(self.dvm.pointer_flag | self.dvm.data_flag | 15)
+        self.assertEqual(len(self.dvm.stack), 0)
+        self.assertEqual(self.dvm.position, 10)
+
+    def testBranchTrueStackPointer(self):
         self.dvm.pushStack(15)
         self.dvm.pushStack(1)
         self.dvm.setMem(15, 10)
