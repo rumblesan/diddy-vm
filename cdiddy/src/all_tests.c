@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 #include "min_unit.h"
-#include "unit_tests.h"
+#include "test_vmbase.h"
 
 
 int tests_run = 0;
