@@ -62,10 +62,7 @@ int main(int argc, char *argv[]) {
 	
 	//Get file length
 	fseek(file, 0, SEEK_END);
-    //We want file length in ints
-    //means byte length divided by 4
-    //minus 1 for EOF signifier
-	fileLen = (ftell(file) - 1) / 4;
+	fileLen = ftell(file) / 4;
 	fseek(file, 0, SEEK_SET);
 
     fprintf(stdout, "File is %lu ints long\n", fileLen);
