@@ -5,8 +5,6 @@
 #include "vmbase.h"
 #include "min_unit.h"
 
-int tests_run = 0;
-
 static char * test_creation() {
     DVM dvm = setup_vmbase();
 
@@ -150,8 +148,7 @@ static char * test_exit() {
     return 0;
 }
 
-
-static char * all_tests() {
+char * all_tests() {
     mu_run_test(test_creation);
     mu_run_test(test_execute_next_instruction);
     mu_run_test(test_set_instruction_pointer);
@@ -163,17 +160,5 @@ static char * all_tests() {
     mu_run_test(test_exit);
     mu_run_test(test_load_program);
     return 0;
-}
-
-int main(int argc, char *argv[]) {
-    char *result = all_tests();
-    if (result != 0) {
-        printf("%s\n", result);
-    } else {
-        printf("ALL TESTS PASSED\n");
-    }
-    printf("Tests run: %d\n", tests_run);
-
-    return result != 0;
 }
 
