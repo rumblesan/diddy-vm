@@ -16,7 +16,7 @@ class TestVMBase(unittest.TestCase):
         self.assertTrue(self.vmbase.running)
 
     def testExecuteNextInstruction(self):
-        self.vmbase.instructions[1 << 28] = self.vmStop
+        self.vmbase.instructions[1] = self.vmStop
         self.vmbase.running = True
         self.vmbase.position = 100
         self.vmbase.ram[100] = 1 << 28

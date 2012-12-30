@@ -47,10 +47,9 @@ class VMBase(object):
         by the position pointer and executes it
         """
         bits = self.ram[self.position]
-        inst = bits & self.instruction_mask
+        inst = (bits & self.instruction_mask) >> 28
 
         self.instructions[inst](bits)
-
 
     def setInstructionPointer(self, address):
         """

@@ -31,18 +31,18 @@ class DVM(VMBase):
 
         i = self.instructions
 
-        i[0 << 28] = self.nop
-        i[1 << 28] = self.push
-        i[2 << 28] = self.pop
-        i[3 << 28] = self.jump
-        i[4 << 28] = self.branch
-        i[5 << 28] = self.equal
-        i[6 << 28] = self.greater
-        i[7 << 28] = self.lesser
-        i[8 << 28] = self.add
-        i[9 << 28] = self.subtract
-        i[10 << 28] = self.output
-        i[11 << 28] = self.halt
+        i[0] = self.nop
+        i[1] = self.push
+        i[2] = self.pop
+        i[3] = self.jump
+        i[4] = self.branch
+        i[5] = self.equal
+        i[6] = self.greater
+        i[7] = self.lesser
+        i[8] = self.add
+        i[9] = self.subtract
+        i[10] = self.output
+        i[11] = self.halt
 
         self.data_flag = 1 << 27
         self.pointer_flag = 1 << 26
