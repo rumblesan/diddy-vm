@@ -1,5 +1,6 @@
 CC                = clang
-CFLAGS            = -c -Wall
+CFLAGS            = -Wall
+LDFLAGS           = -c
 VPATH             = src
 TEMP_DIR          = temp
 HEADERS           = include/
@@ -20,13 +21,13 @@ tests: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
 $(TEMP_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -I$(HEADERS) $< -o $@
+	$(CC) $(LDFLAGS) $(CFLAGS) -I$(HEADERS) $< -o $@
 
 $(EXECUTABLE): $(DVM_OBJECTS)
-	$(CC) $(DVM_OBJECTS) -o $@
+	$(CC) $(CFLAGS) $(DVM_OBJECTS) -o $@
 
 $(TEST_EXECUTABLE): $(TEST_OBJECTS)
-	$(CC) $(TEST_OBJECTS) -o $@
+	$(CC) $(CFLAGS) $(TEST_OBJECTS) -o $@
 
 clean:
 	rm -rf $(TEMP_DIR)/*.o $(EXECUTABLE)
