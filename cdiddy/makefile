@@ -3,9 +3,16 @@ CFLAGS            = -Wall
 LDFLAGS           = -c
 VPATH             = src src/core src/tests
 
+TEST_CFLAGS       = --coverage $(CFLAGS)
+TEST_LIBS         = -lprofile_rt
+
+LCOV_FLAGS        = -c -b ./ -d ./
+
 MAIN_BUILD_DIR    = build/main
 TEST_BUILD_DIR    = build/tests
 HEADER_DIRS       = include include/core include/tests
+COVERAGE_DIR      = coverage
+COVERAGE_FILE     = $(COVERAGE_DIR)/coverage.info
 
 INCLUDES          = $(addprefix -I, $(HEADER_DIRS))
 
@@ -24,17 +31,22 @@ all: $(EXECUTABLE)
 tests: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
+coverage: $(TEST_EXECUTABLE)
+	./$(TEST_EXECUTABLE)
+	lcov $(LCOV_FLAGS) -o $(COVERAGE_FILE)
+	genhtml $(COVERAGE_FILE) -o $(COVERAGE_DIR)
+
 $(MAIN_BUILD_DIR)/%.o: %.c
 	$(CC) $(LDFLAGS) $(CFLAGS) $(INCLUDES) $< -o $@
 
 $(TEST_BUILD_DIR)/%.o: %.c
-	$(CC) $(LDFLAGS) $(CFLAGS) $(INCLUDES) $< -o $@
+	$(CC) $(LDFLAGS) $(TEST_CFLAGS) $(INCLUDES) $< -o $@
 
 $(EXECUTABLE): $(DVM_OBJECTS)
 	$(CC) $(CFLAGS) $(DVM_OBJECTS) -o $@
 
 $(TEST_EXECUTABLE): $(TEST_OBJECTS)
-	$(CC) $(CFLAGS) $(TEST_OBJECTS) -o $@
+	$(CC) $(TEST_LIBS) $(TEST_CFLAGS) $(TEST_OBJECTS) -o $@
 
 clean:
 	rm -rf $(MAIN_BUILD_DIR)/* $(EXECUTABLE)
