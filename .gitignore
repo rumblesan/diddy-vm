@@ -1,4 +1,4 @@
 *.pyc
 compiled/
-temp/
+build/
 /cdiddy/cdiddy
