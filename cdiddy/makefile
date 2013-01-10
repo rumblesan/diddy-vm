@@ -3,7 +3,8 @@ CFLAGS            = -Wall
 LDFLAGS           = -c
 VPATH             = src src/core src/tests
 TEMP_DIR          = temp
-HEADERS           = include/
+HEADER_DIRS       = include include/core include/tests
+INCLUDES          = $(addprefix -I, $(HEADER_DIRS))
 
 CORE_SOURCES      = $(notdir $(wildcard src/core/*.c))
 TEST_SOURCES      = $(notdir $(wildcard src/tests/*.c)) $(CORE_SOURCES)
@@ -21,7 +22,7 @@ tests: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 
 $(TEMP_DIR)/%.o: %.c
-	$(CC) $(LDFLAGS) $(CFLAGS) -I$(HEADERS) $< -o $@
+	$(CC) $(LDFLAGS) $(CFLAGS) $(INCLUDES) $< -o $@
 
 $(EXECUTABLE): $(DVM_OBJECTS)
 	$(CC) $(CFLAGS) $(DVM_OBJECTS) -o $@
