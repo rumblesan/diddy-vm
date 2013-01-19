@@ -3,6 +3,7 @@
 import unittest
 from vmbase import VMBase
 
+
 class TestVMBase(unittest.TestCase):
 
     def setUp(self):
@@ -53,6 +54,13 @@ class TestVMBase(unittest.TestCase):
         self.assertEqual(self.vmbase.popStack(), 2)
         self.assertEqual(self.vmbase.popStack(), 1)
 
+    def testEmptyStackPop(self):
+        self.assertTrue(self.vmbase.running)
+        self.assertEqual(self.vmbase.status, 0)
+        self.vmbase.popStack()
+        self.assertEqual(self.vmbase.status, 1)
+        self.assertFalse(self.vmbase.running)
+
     def testSetMem(self):
         self.vmbase.setMem(100, 111)
         self.vmbase.setMem(101, 222)
@@ -100,4 +108,3 @@ class TestVMBase(unittest.TestCase):
         self.vmbase.systemExit(1)
         self.assertEqual(self.vmbase.status, 1)
         self.assertFalse(self.vmbase.running)
-

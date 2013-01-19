@@ -12,6 +12,7 @@
 
 import sys
 
+
 class VMBase(object):
 
     """
@@ -80,12 +81,15 @@ class VMBase(object):
         Pop a value off the VM stack
         data should be an integer
         """
-        value = self.stack.pop()
-        if self.debug:
-            print("stack size:  %i" % len(self.stack))
-        if self.stack_display:
-            print(self.stack)
-        return value
+        try:
+            value = self.stack.pop()
+            if self.debug:
+                print("stack size:  %i" % len(self.stack))
+            if self.stack_display:
+                print(self.stack)
+            return value
+        except IndexError:
+            self.systemExit(1)
 
     def getMem(self, addr=-1):
         """
@@ -121,7 +125,6 @@ class VMBase(object):
         """
         sys.stdout.write(chr(c))
 
-
     def loadProgram(self, programData):
         """
         Loads a program into memory
@@ -136,4 +139,3 @@ if __name__ == '__main__':
     import unittest
     from tests.testvmbase import TestVMBase
     unittest.main()
-
