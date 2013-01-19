@@ -93,6 +93,33 @@ static char * test_stack() {
     return 0;
 }
 
+static char * test_empty_stack_errors() {
+    DVM dvm = setup_vmbase();
+
+    pop_stack(dvm);
+    mu_assert("Error: DVM running should be 0", dvm->running == 0);
+    mu_assert("Error: DVM status should be 1", dvm->status == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
+static char * test_full_stack_errors() {
+    DVM dvm = setup_vmbase();
+
+    for (int i = 0; i < dvm->stack_size; i++) {
+        push_stack(dvm, 0);
+    }
+    mu_assert("Error: DVM should be running", dvm->running == 1);
+    mu_assert("Error: DVM status should be 0", dvm->status == 0);
+    push_stack(dvm, 0);
+    mu_assert("Error: DVM running should be 0", dvm->running == 0);
+    mu_assert("Error: DVM status should be 1", dvm->status == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
 static char * test_set_mem() {
     DVM dvm = setup_vmbase();
 
@@ -164,6 +191,8 @@ char * test_vmbase() {
     mu_run_test(test_set_instruction_pointer);
     mu_run_test(test_next_instruction_pointer);
     mu_run_test(test_stack);
+    mu_run_test(test_empty_stack_errors);
+    mu_run_test(test_full_stack_errors);
     mu_run_test(test_get_mem);
     mu_run_test(test_get_pointer_mem);
     mu_run_test(test_set_mem);
