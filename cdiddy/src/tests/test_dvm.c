@@ -1,8 +1,8 @@
 #include <stdint.h>
 
-#include "dvm.h"
-#include "vmbase.h"
-#include "min_unit.h"
+#include "core/dvm.h"
+#include "core/vmbase.h"
+#include "tests/min_unit.h"
 
 static char * test_dvm_creation() {
     DVM dvm = setup_diddy();

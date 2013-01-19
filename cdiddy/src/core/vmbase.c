@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdint.h>
 
-#include "vmbase.h"
+#include "core/vmbase.h"
 
 #define INSTRUCTION_MASK 0xF0000000
 

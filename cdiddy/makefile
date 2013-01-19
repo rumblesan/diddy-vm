@@ -10,7 +10,7 @@ LCOV_FLAGS        = -c -b ./ -d ./
 
 MAIN_BUILD_DIR    = build/main
 TEST_BUILD_DIR    = build/tests
-HEADER_DIRS       = include include/core include/tests
+HEADER_DIRS       = include
 COVERAGE_DIR      = coverage
 COVERAGE_FILE     = $(COVERAGE_DIR)/coverage.info
 

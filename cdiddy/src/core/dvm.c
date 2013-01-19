@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#include "dvm.h"
-#include "vmbase.h"
+#include "core/dvm.h"
+#include "core/vmbase.h"
 
 DVM setup_diddy() {
 

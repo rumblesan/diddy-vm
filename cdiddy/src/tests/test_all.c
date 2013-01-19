@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "min_unit.h"
-#include "test_vmbase.h"
-#include "test_dvm.h"
+#include "tests/min_unit.h"
+#include "tests/test_vmbase.h"
+#include "tests/test_dvm.h"
 
 int tests_run;
 

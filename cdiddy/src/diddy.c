@@ -4,8 +4,8 @@
 #include <stdint.h>
 
 #include "diddy.h"
-#include "dvm.h"
-#include "vmbase.h"
+#include "core/dvm.h"
+#include "core/vmbase.h"
 
 void usage(int exitval) {
     printf("Diddy usage:\n");
