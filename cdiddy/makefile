@@ -34,6 +34,7 @@ tests: $(TEST_EXECUTABLE)
 coverage: $(TEST_EXECUTABLE)
 	./$(TEST_EXECUTABLE)
 	lcov $(LCOV_FLAGS) -o $(COVERAGE_FILE)
+	lcov -r $(COVERAGE_FILE) test\* -o $(COVERAGE_FILE)
 	genhtml $(COVERAGE_FILE) -o $(COVERAGE_DIR)
 
 $(MAIN_BUILD_DIR)/%.o: %.c
