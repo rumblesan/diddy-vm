@@ -3,6 +3,7 @@
 #include "core/dvm.h"
 #include "core/vmbase.h"
 #include "tests/min_unit.h"
+#include "tests/test_system_overrides.h"
 
 static char * test_creation() {
     DVM dvm = setup_vmbase();
@@ -147,6 +148,16 @@ static char * test_exit() {
     return 0;
 }
 
+static char * test_system_out() {
+    DVM dvm = setup_vmbase();
+
+    system_out(dvm, 5);
+    mu_assert("Error: DVM status should be running", dvm->running == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
 char * test_vmbase() {
     mu_run_test(test_creation);
     mu_run_test(test_execute_next_instruction);
@@ -157,6 +168,7 @@ char * test_vmbase() {
     mu_run_test(test_get_pointer_mem);
     mu_run_test(test_set_mem);
     mu_run_test(test_exit);
+    mu_run_test(test_system_out);
     mu_run_test(test_load_program);
     return 0;
 }
