@@ -402,6 +402,55 @@ static char * test_dvm_subtract_stack() {
     return 0;
 }
 
+static char * test_dvm_output_stack() {
+    DVM dvm = setup_diddy();
+
+    push_stack(dvm, 3);
+    output(dvm, 0);
+    mu_assert("Error: DVM status should be 0", dvm->status == 0);
+    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
+static char * test_dvm_output_data() {
+    DVM dvm = setup_diddy();
+
+    output(dvm, DATA_FLAG | 3);
+    mu_assert("Error: DVM status should be 0", dvm->status == 0);
+    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
+static char * test_dvm_output_stack_pointer() {
+    DVM dvm = setup_diddy();
+
+    setMem(dvm, 10, 5);
+    push_stack(dvm, 10);
+    output(dvm, POINTER_FLAG | 0);
+    mu_assert("Error: DVM status should be 0", dvm->status == 0);
+    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
+static char * test_dvm_output_data_pointer() {
+    DVM dvm = setup_diddy();
+
+    setMem(dvm, 10, 5);
+    output(dvm, DATA_FLAG | POINTER_FLAG | 10);
+    mu_assert("Error: DVM status should be 0", dvm->status == 0);
+    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    cleanup_dvm(dvm);
+    return 0;
+}
+
+
 static char * test_dvm_halt_stack() {
     DVM dvm = setup_diddy();
 
@@ -490,6 +539,10 @@ char * test_dvm() {
     mu_run_test(test_dvm_add_stack);
     mu_run_test(test_dvm_subtract_data);
     mu_run_test(test_dvm_subtract_stack);
+    mu_run_test(test_dvm_output_stack);
+    mu_run_test(test_dvm_output_data);
+    mu_run_test(test_dvm_output_stack_pointer);
+    mu_run_test(test_dvm_output_data_pointer);
     mu_run_test(test_dvm_halt_stack);
     mu_run_test(test_dvm_halt_data);
     mu_run_test(test_dvm_halt_stack_pointer);
