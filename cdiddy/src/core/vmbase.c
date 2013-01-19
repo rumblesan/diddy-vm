@@ -104,13 +104,6 @@ void load_program(DVM dvm, uint32_t *program_data, int length) {
     set_instruction_pointer(dvm, 1);
 }
 
-void dump_program(DVM dvm) {
-    int i;
-    for (i = 0; i < dvm->program_length; i++) {
-        printf("%i\n", getMem(dvm, i));
-    }
-}
-
 void cleanup_dvm(DVM dvm) {
     free(dvm->ram);
     free(dvm->stack);
