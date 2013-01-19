@@ -3,4 +3,6 @@
 
 int putchar(int c);
 
+int getchar();
+
 #endif
