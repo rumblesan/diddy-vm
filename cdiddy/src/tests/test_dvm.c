@@ -3,6 +3,7 @@
 #include "core/dvm.h"
 #include "core/vmbase.h"
 #include "tests/min_unit.h"
+#include "tests/test_system_overrides.h"
 
 static char * test_dvm_creation() {
     DVM dvm = setup_diddy();
@@ -404,11 +405,13 @@ static char * test_dvm_subtract_stack() {
 
 static char * test_dvm_output_stack() {
     DVM dvm = setup_diddy();
+    putchar(0);
 
     push_stack(dvm, 3);
     output(dvm, 0);
-    mu_assert("Error: DVM status should be 0", dvm->status == 0);
-    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    int sent = getchar();
+    mu_assert("Error: DVM sent should be 3", sent == 3);
 
     cleanup_dvm(dvm);
     return 0;
@@ -416,10 +419,12 @@ static char * test_dvm_output_stack() {
 
 static char * test_dvm_output_data() {
     DVM dvm = setup_diddy();
+    putchar(0);
 
     output(dvm, DATA_FLAG | 3);
-    mu_assert("Error: DVM status should be 0", dvm->status == 0);
-    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    int sent = getchar();
+    mu_assert("Error: DVM sent should be 3", sent == 3);
 
     cleanup_dvm(dvm);
     return 0;
@@ -427,12 +432,14 @@ static char * test_dvm_output_data() {
 
 static char * test_dvm_output_stack_pointer() {
     DVM dvm = setup_diddy();
+    putchar(0);
 
     setMem(dvm, 10, 5);
     push_stack(dvm, 10);
     output(dvm, POINTER_FLAG | 0);
-    mu_assert("Error: DVM status should be 0", dvm->status == 0);
-    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    int sent = getchar();
+    mu_assert("Error: DVM sent should be 5", sent == 5);
 
     cleanup_dvm(dvm);
     return 0;
@@ -440,11 +447,13 @@ static char * test_dvm_output_stack_pointer() {
 
 static char * test_dvm_output_data_pointer() {
     DVM dvm = setup_diddy();
+    putchar(0);
 
     setMem(dvm, 10, 5);
     output(dvm, DATA_FLAG | POINTER_FLAG | 10);
-    mu_assert("Error: DVM status should be 0", dvm->status == 0);
-    mu_assert("Error: DVM should be running", dvm->running == 1);
+
+    int sent = getchar();
+    mu_assert("Error: DVM sent should be 5", sent == 5);
 
     cleanup_dvm(dvm);
     return 0;
