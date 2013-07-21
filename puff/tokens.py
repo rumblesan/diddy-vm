@@ -33,5 +33,17 @@ def CLOSEBRACKET():
     return ("CLOSEBRACKET", )
 
 
+def ASSIGNMENT():
+    return ("ASSIGNMENT", )
+
+
 def EOF():
     return ("EOF", )
+
+
+def FUNCTIONDEF():
+    return ("FUNCTIONDEF", )
+
+
+def FUNCTIONRETURN():
+    return ("FUNCTIONRETURN", )

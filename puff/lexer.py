@@ -27,12 +27,22 @@ class lexer(object):
 
     def parse_name(self, prog_data):
         name = ''
+        token = None
         while True:
             val = prog_data.peek()
             if self.name_re.match(val):
                 name += prog_data.pop()
             else:
-                return (t.NAME(name), prog_data)
+                break
+        if name == "def":
+            token = t.FUNCTIONDEF()
+        elif name == "var":
+            token = t.ASSIGNMENT()
+        elif name == "return":
+            token = t.FUNCTIONRETURN()
+        else:
+            token = t.NAME(name)
+        return (token, prog_data)
 
     def parse_symbol(self, prog_data):
         symbol = ''

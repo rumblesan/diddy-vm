@@ -68,16 +68,18 @@ class Testlexer(unittest.TestCase):
 
     def test_basic_parse(self):
         input_data = """
-        foo = 45 + 5.4;
-        bar = foo - 2;
+        var foo = 45 + 5.4;
+        var bar = foo - 2;
         """
         expected_output = [
+            ("ASSIGNMENT", ),
             ("NAME", "foo"),
             ("SYMBOL", "="),
             ("NUMBER", 45),
             ("SYMBOL", "+"),
             ("NUMBER", 5.4),
             ("SEMICOLON", ),
+            ("ASSIGNMENT", ),
             ("NAME", "bar"),
             ("SYMBOL", "="),
             ("NAME", "foo"),
@@ -93,13 +95,13 @@ class Testlexer(unittest.TestCase):
     def test_more_complex_parse(self):
         input_data = """
         def foo(one, two) {
-            bacon = one + 2;
+            var bacon = one + 2;
             return bacon * (2 + two);
         }
-        bar = foo(2.3, 8);
+        var bar = foo(2.3, 8);
         """
         expected_output = [
-            ("NAME", "def"),
+            ("FUNCTIONDEF", ),
             ("NAME", "foo"),
             ("OPENPAREN", ),
             ("NAME", "one"),
@@ -107,13 +109,14 @@ class Testlexer(unittest.TestCase):
             ("NAME", "two"),
             ("CLOSEPAREN", ),
             ("OPENBRACKET", ),
+            ("ASSIGNMENT", ),
             ("NAME", "bacon"),
             ("SYMBOL", "="),
             ("NAME", "one"),
             ("SYMBOL", "+"),
             ("NUMBER", 2),
             ("SEMICOLON", ),
-            ("NAME", "return"),
+            ("FUNCTIONRETURN", ),
             ("NAME", "bacon"),
             ("SYMBOL", "*"),
             ("OPENPAREN", ),
@@ -123,6 +126,7 @@ class Testlexer(unittest.TestCase):
             ("CLOSEPAREN", ),
             ("SEMICOLON", ),
             ("CLOSEBRACKET", ),
+            ("ASSIGNMENT", ),
             ("NAME", "bar"),
             ("SYMBOL", "="),
             ("NAME", "foo"),
