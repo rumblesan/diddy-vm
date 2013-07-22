@@ -15,28 +15,29 @@ class parser(object):
         blocks = []
         p = True
         while p:
-            e = program_data.peek()
-
-            if e[0] == "EOF":
+            e = self.parse_line(program_data)
+            if not e:
                 break
-            elif e[0] == "NAME":
-                blocks.append(self.parse_line(program_data))
-            else:
-                raise SyntaxError("Not expecting " + e[0])
+            blocks.append(e)
 
         return blocks
 
     def parse_line(self, program_data):
+        e = None
         t = program_data.peek()
 
-        if t[1] == "var":
-            e = self.parse_assignment(program_data)
-        elif t[1] == "def":
+        if t[0] == "EOF":
+            e = None
+        elif t[0] == "NAME":
+            e = self.parse_line(program_data)
+        elif t[0] == "FUNCTIONDEF":
             e = self.parse_function(program_data)
-        elif t[1] == "return":
+        elif t[0] == "ASSIGNMENT":
+            e = self.parse_assignment(program_data)
+        elif t[0] == "FUNCTIONRETURN":
             e = self.parse_function_return(program_data)
         else:
-            raise SyntaxError("Not expecting " + t[1])
+            raise SyntaxError("Not expecting " + t[0])
 
         return e
 
@@ -48,11 +49,15 @@ class parser(object):
                 break
             else:
                 expr.append(e)
+
+        for s in expr:
+            #This is where precedence ordering will occour
+            pass
         return expr
 
     def parse_assignment(self, program_data):
         v = program_data.pop()
-        if v[1] != "var":
+        if v[0] != "ASSIGNMENT":
             raise SyntaxError("Expecting 'var not '%s'" % v[1])
         var_name = program_data.pop()
         eq = program_data.pop()
@@ -64,7 +69,7 @@ class parser(object):
 
     def parse_function(self, program_data):
         d = program_data.pop()
-        if d[1] != "def":
+        if d[0] != "FUNCTIONDEF":
             raise SyntaxError("Expecting 'def' not '%s'" % d[1])
         func_name = program_data.pop()
         func_args = self.parse_function_args(program_data)
@@ -112,11 +117,13 @@ class parser(object):
 
     def parse_function_return(self, program_data):
         v = program_data.pop()
-        if v[1] != "return":
+        if v[0] != "FUNCTIONRETURN":
             raise SyntaxError("Expecting 'return' not '%s'" % v[1])
         var_expr = self.parse_expression(program_data)
-        print("return")
         return var_expr
+
+    def parse_function_call(self, program_data):
+        pass
 
 
 if __name__ == '__main__':
