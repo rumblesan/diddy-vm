@@ -9,6 +9,8 @@ class progdata(object):
         self.count = 0
         self.fin = False
 
+        self.tokens = []
+
     def peek(self):
         if self.count >= self.length:
             return None
@@ -42,6 +44,9 @@ class progdata(object):
             return []
         else:
             return self.program[self.count:]
+
+    def add_token(self, token):
+        self.tokens.append(token)
 
 
 if __name__ == '__main__':

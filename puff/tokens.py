@@ -17,14 +17,6 @@ def SEMICOLON():
     return ("SEMICOLON", )
 
 
-def WHITESPACE():
-    return ("WHITESPACE", )
-
-
-def NEWLINE():
-    return ("NEWLINE", )
-
-
 def OPENPAREN():
     return ("OPENPAREN", )
 

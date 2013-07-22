@@ -26,45 +26,45 @@ class Testlexer(unittest.TestCase):
 
     def test_parse_float(self):
         input_data = progdata("44.67  ")
-        number, prog_data = self.lexer.parse_number(input_data)
+        number = self.lexer.parse_number(input_data)
         self.assertEqual(number, ("NUMBER", 44.67))
-        self.assertEqual(prog_data.remaining(), "  ")
+        self.assertEqual(input_data.remaining(), "  ")
 
     def test_parse_int(self):
         input_data = progdata("4467  ")
-        number, prog_data = self.lexer.parse_number(input_data)
+        number = self.lexer.parse_number(input_data)
         self.assertEqual(number, ("NUMBER", 4467))
-        self.assertEqual(prog_data.remaining(), "  ")
+        self.assertEqual(input_data.remaining(), "  ")
 
     def test_parse_name(self):
         input_data = progdata("name  ")
-        name, prog_data = self.lexer.parse_name(input_data)
+        name = self.lexer.parse_name(input_data)
         self.assertEqual(name, ("NAME", "name"))
-        self.assertEqual(prog_data.remaining(), "  ")
+        self.assertEqual(input_data.remaining(), "  ")
 
     def test_parse_symbol(self):
         input_data = progdata("++  ")
-        symbol, prog_data = self.lexer.parse_symbol(input_data)
+        symbol = self.lexer.parse_symbol(input_data)
         self.assertEqual(symbol, ("SYMBOL", "++"))
-        self.assertEqual(prog_data.remaining(), "  ")
+        self.assertEqual(input_data.remaining(), "  ")
 
     def test_parse_semicolon(self):
         input_data = progdata(""";  """)
-        semicolon, prog_data = self.lexer.parse_semicolon(input_data)
+        semicolon = self.lexer.parse_semicolon(input_data)
         self.assertEqual(semicolon, ("SEMICOLON", ))
-        self.assertEqual(prog_data.remaining(), "  ")
+        self.assertEqual(input_data.remaining(), "  ")
 
     def test_parse_open_paren(self):
         input_data = progdata("(  ")
-        paren, prog_data = self.lexer.parse_paren(input_data)
+        paren = self.lexer.parse_paren(input_data)
         self.assertEqual(paren, ("OPENPAREN", ))
-        self.assertEqual(prog_data.remaining(), "  ")
+        self.assertEqual(input_data.remaining(), "  ")
 
     def test_parse_close_paren(self):
         input_data = progdata(")  ")
-        paren, prog_data = self.lexer.parse_paren(input_data)
+        paren = self.lexer.parse_paren(input_data)
         self.assertEqual(paren, ("CLOSEPAREN", ))
-        self.assertEqual(prog_data.remaining(), "  ")
+        self.assertEqual(input_data.remaining(), "  ")
 
     def test_basic_parse(self):
         input_data = """
