@@ -1,4 +1,57 @@
 
+
+class addition(object):
+
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+
+class subtract(object):
+
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+
+class product(object):
+
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+
+class division(object):
+
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+
+class greater(object):
+
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+
+class less(object):
+
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+
+class equal(object):
+
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+
+
+
+
 class expression(object):
 
     def __init__(self, symbols):
